@@ -10,6 +10,8 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Threading.Tasks;
 using System.Web;
+using System.Net.Configuration;
+using System.Configuration;
 
 namespace IdentitySample.Models
 {
@@ -142,29 +144,34 @@ namespace IdentitySample.Models
         {
             // Plug in your email service here to send an email.
            // return Task.FromResult(0);
-            // Credentials:
-            var credentialUserName = "relay@sym-tech.ca";
-            var sentFrom = "relay@sym-tech.ca";
-            var pwd = "";
+
+            SmtpSection section = (SmtpSection)ConfigurationManager.GetSection("system.net/mailSettings/smtp");
+
+            string from = section.From;
+            string host = section.Network.Host;
+            int port = section.Network.Port;
+            bool enableSsl = section.Network.EnableSsl;
+            string user = section.Network.UserName;
+            string password = section.Network.Password;
 
             // Configure the client:
             System.Net.Mail.SmtpClient client =
-                new System.Net.Mail.SmtpClient("192.168.2.207");//"smtp.live.com"
+                new System.Net.Mail.SmtpClient(host);//"smtp.live.com"
 
-            client.Port = 25;// 587;
+            client.Port = port;// 587;
             client.DeliveryMethod = System.Net.Mail.SmtpDeliveryMethod.Network;
             client.UseDefaultCredentials = false;
 
             // Creatte the credentials:
             System.Net.NetworkCredential credentials =
-                new System.Net.NetworkCredential(credentialUserName, pwd);
+                new System.Net.NetworkCredential(user, password);
 
-            // client.EnableSsl = true;
+            client.EnableSsl = enableSsl;
             client.Credentials = credentials;
 
             // Create the message:
             var mail =
-                new System.Net.Mail.MailMessage(sentFrom, message.Destination);
+                new System.Net.Mail.MailMessage(from, message.Destination);
 
             mail.Subject = message.Subject;
             mail.Body = message.Body;
