@@ -157,10 +157,15 @@ namespace IdentitySample.Controllers
                 if (result.Succeeded)
                 {
                     var code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
-                    var token = await UserManager.GenerateTwoFactorTokenAsync(user.Id, "EmailCode");
                    // await Task.WhenAll(code, token);
                     var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
-                    await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking this link: <a href=\"" + callbackUrl + "\">link</a>. Verify code:" + token);
+                    if (user.TwoFactorEnabled)
+                    {
+                        var token = await UserManager.GenerateTwoFactorTokenAsync(user.Id, "EmailCode");
+                        await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking this link: <a href=\"" + callbackUrl + "\">link</a>.<br> Verify code:" + token);                   
+                    }
+                    await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking this link: <a href=\"" + callbackUrl + "\">link</a>");
+                   
                     ViewBag.Link = callbackUrl;
                     return View("DisplayEmail");
                 }
