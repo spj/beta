@@ -156,9 +156,9 @@ namespace IdentitySample.Models
 
             // Configure the client:
             System.Net.Mail.SmtpClient client =
-                new System.Net.Mail.SmtpClient(host);//"smtp.live.com"
+                new System.Net.Mail.SmtpClient(host);
 
-            client.Port = port;// 587;
+            client.Port = port;
             client.DeliveryMethod = System.Net.Mail.SmtpDeliveryMethod.Network;
             client.UseDefaultCredentials = false;
 
