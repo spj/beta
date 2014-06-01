@@ -9,6 +9,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using DBRepository;
 
 namespace IdentitySample.Controllers
 {
@@ -156,6 +157,7 @@ namespace IdentitySample.Controllers
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
+                    new Account().RegisterUserDealer(user.Id, model.Dealer);
                     var code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
                    // await Task.WhenAll(code, token);
                     var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
