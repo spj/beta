@@ -26,12 +26,8 @@
         </div>
     </div>
     <div class="form-group">
-        <div class="col-md-offset-2 col-md-10">
-            <input type="submit" class="btn btn-default" value="Veify" />
-        </div>
-        <div class="col-md-offset-2 col-md-10">
-            <input type="button" class="btn btn-default" value="Send New One" onclick="SendVerifyCode()"/>
-        </div>
+        <input type="submit" class="btn btn-default col-md-offset-2 col-md-10"  value="Veify" />
+        <input type="button" class="btn btn-default col-md-offset-2 col-md-10" value="Send New One" onclick="SendVerifyCode()" />
     </div>
 }
 
@@ -42,7 +38,6 @@
 <script>
     function SendVerifyCode() {
         $.post('@Url.Action("SendCode")', {}).done(function () {
-            debugger;
         });
     }
 </script>
