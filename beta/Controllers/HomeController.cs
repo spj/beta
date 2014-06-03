@@ -1,23 +1,19 @@
-﻿using System.Web.Mvc;
+﻿using beta.Controllers;
+using System.Web.Mvc;
 
 namespace IdentitySample.Controllers {
-    public class HomeController : Controller {
-        public ActionResult Index()
+    public class HomeController : SessionlessController {
+        [Authorize]
+        public ActionResult Home()
         {
             return View();
         }
 
-        [Authorize]
-        public ActionResult About() {
+        public ActionResult Index() {
             ViewBag.Message = "Your app description page.";
 
             return View();
         }
 
-        public ActionResult Contact() {
-            ViewBag.Message = "Your contact page.";
-
-            return View();
-        }
     }
 }
