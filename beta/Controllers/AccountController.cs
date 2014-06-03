@@ -11,7 +11,7 @@ using System.Web;
 using System.Web.Mvc;
 using DBRepository;
 
-namespace IdentitySample.Controllers
+namespace beta.Controllers
 {
     [Authorize]
     public class AccountController : Controller

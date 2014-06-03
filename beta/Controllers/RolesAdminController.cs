@@ -9,7 +9,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Collections.Generic;
 
-namespace IdentitySample.Controllers
+namespace beta.Controllers
 {
     [Authorize(Roles = "Admin")]
     public class RolesAdminController : Controller

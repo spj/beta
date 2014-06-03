@@ -1,7 +1,7 @@
 ﻿using beta.Controllers;
 using System.Web.Mvc;
 
-namespace IdentitySample.Controllers {
+namespace beta.Controllers {
     public class HomeController : SessionlessController {
         [Authorize]
         public ActionResult Home()
