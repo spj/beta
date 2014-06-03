@@ -1,4 +1,4 @@
-﻿using IdentitySample.Models;
+﻿using beta.Models;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.AspNet.Identity.EntityFramework;
