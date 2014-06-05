@@ -41,7 +41,8 @@
                     </div>
                 </div>
                 <p>
-                    @Html.ActionLink("Register a new user?", "Register")
+                    @*@Html.ActionLink("Register a new user?", "Register")*@
+                    <a href="#" onclick="loadRegister()">Register a new user?</a>
                 </p>
                 <p>
                     @Html.ActionLink("Forget your password?", "ForgotPassword")
@@ -55,6 +56,4 @@
         </section>
     </div>
 </div>
-@section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
-}
+ @Scripts.Render("~/bundles/beta.account")

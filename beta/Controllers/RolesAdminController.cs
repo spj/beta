@@ -14,6 +14,12 @@ namespace beta.Controllers
     [Authorize(Roles = "Admin")]
     public class RolesAdminController : Controller
     {
+        public PartialViewResult GetView(string id)
+        {
+            return PartialView(id);
+        }
+
+        #region sample
         public RolesAdminController()
         {
         }
@@ -195,5 +201,6 @@ namespace beta.Controllers
             }
             return View();
         }
+        #endregion
     }
 }

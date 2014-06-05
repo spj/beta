@@ -56,12 +56,17 @@ namespace beta.Models {
         [Required]
         [Display(Name = "Dealer")]
         public string Dealer { get; set; }
-
+        [Required]
+        [Display(Name = "UserName")]
+        public string UserName { get; set; }
         [Required]
         [EmailAddress]
         [Display(Name = "Email")]
         public string Email { get; set; }
-
+        [Required]
+        [Phone]
+        [Display(Name = "PhoneNumber")]
+        public string PhoneNumber { get; set; }
         [Required]
         [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
         [DataType(DataType.Password)]

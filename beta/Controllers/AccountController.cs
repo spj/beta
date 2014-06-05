@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using DBRepository;
+using Newtonsoft.Json;
 
 namespace beta.Controllers
 {
@@ -24,7 +25,13 @@ namespace beta.Controllers
         {
             UserManager = userManager;
         }
+        [AllowAnonymous]
+        public PartialViewResult GetView(string id)
+        {
+            return PartialView(id);
+        }
 
+        #region sample
         private ApplicationUserManager _userManager;
         public ApplicationUserManager UserManager
         {
@@ -149,29 +156,26 @@ namespace beta.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Register(RegisterViewModel model)
+        public async Task<ActionResult> Register(string data)
         {
-            if (ModelState.IsValid)
+            RegisterViewModel model = JsonConvert.DeserializeObject<RegisterViewModel>(data);
+            var user = new ApplicationUser { UserName = model.UserName, Email = model.Email, LockoutEnabled = true, TwoFactorEnabled = true, PhoneNumber=model.PhoneNumber };
+            var result = await UserManager.CreateAsync(user, model.Password);
+            if (result.Succeeded)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email, LockoutEnabled=true, TwoFactorEnabled=true };
-                var result = await UserManager.CreateAsync(user, model.Password);
-                if (result.Succeeded)
+                new Account().RegisterUserDealer(user.Id, model.Dealer);
+                var code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
+                // await Task.WhenAll(code, token);
+                var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
+                if (user.TwoFactorEnabled)
                 {
-                    new Account().RegisterUserDealer(user.Id, model.Dealer);
-                    var code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
-                   // await Task.WhenAll(code, token);
-                    var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
-                    if (user.TwoFactorEnabled)
-                    {
-                        var token = await UserManager.GenerateTwoFactorTokenAsync(user.Id, "EmailCode");
-                        await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking this link: <a href=\"" + callbackUrl + "\">link</a>.<br> Verify code:" + token);                   
-                    }
-                    await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking this link: <a href=\"" + callbackUrl + "\">link</a>");
-                   
-                    ViewBag.Link = callbackUrl;
-                    return View("DisplayEmail");
+                    var token = await UserManager.GenerateTwoFactorTokenAsync(user.Id, "EmailCode");
+                    await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking this link: <a href=\"" + callbackUrl + "\">link</a>.<br> Verify code:" + token);
                 }
-                AddErrors(result);
+                await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking this link: <a href=\"" + callbackUrl + "\">link</a>");
+
+                ViewBag.Link = callbackUrl;
+                return View("DisplayEmail");
             }
 
             // If we got this far, something failed, redisplay form
@@ -423,7 +427,7 @@ namespace beta.Controllers
             }
             base.Dispose(disposing);
         }
-
+        #endregion
         #region Helpers
         // Used for XSRF protection when adding external logins
         private const string XsrfKey = "XsrfId";

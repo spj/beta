@@ -12,6 +12,11 @@ namespace beta.Controllers
     [Authorize]
     public class ManageController : Controller
     {
+        public PartialViewResult GetView(string id)
+        {
+            return PartialView(id);
+        }
+        #region sample
         public ManageController()
         {
         }
@@ -337,7 +342,7 @@ namespace beta.Controllers
             }
             base.Dispose(disposing);
         }
-
+        #endregion
         #region Helpers
         // Used for XSRF protection when adding external logins
         private const string XsrfKey = "XsrfId";

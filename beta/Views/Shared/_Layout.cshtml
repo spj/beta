@@ -8,6 +8,9 @@
     <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css">
 </head>
 <body>
+    <script>
+        var beta = { global: {} }
+    </script>
     <div class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">
@@ -18,18 +21,23 @@
                 </button>
                 @if (Request.IsAuthenticated)
                 {
-                     @Html.ActionLink("Home", "Home", "Home",null, new { @class = "navbar-brand" })
+                     @*@Html.ActionLink("Home", "Home", "Home",null, new { @class = "navbar-brand" })*@
+    <a class="navbar-brand" href="#" onclick="gotoController('Home','Home')">Home</a>
                 }
-                else { 
-                    @Html.ActionLink("Application name", "Index", "Home", null, new { @class = "navbar-brand" })
+                else
+                {
+                    @*@Html.ActionLink("Application name", "Index", "Home", null, new { @class = "navbar-brand" })*@
+                      <a class="navbar-brand" href="#" onclick="gotoController('Home')">Home</a>
                 }
             </div>
             <div class="navbar-collapse collapse">                                 
                     @if (Request.IsAuthenticated && User.IsInRole("Admin"))
                     {
                         <ul class="nav navbar-nav">
-                            <li>@Html.ActionLink("RolesAdmin", "Index", "RolesAdmin")</li>
-                            <li>@Html.ActionLink("UsersAdmin", "Index", "UsersAdmin")</li>
+                            @*<li>@Html.ActionLink("RolesAdmin", "Index", "RolesAdmin")</li>
+                            <li>@Html.ActionLink("UsersAdmin", "Index", "UsersAdmin")</li>*@
+                            <li><a href="#" onclick="gotoController('RolesAdmin')">Roles</a></li>
+                            <li><a href="#" onclick="gotoController('UsersAdmin')">Users</a></li>
                         </ul>
                     }
                 @Html.Partial("_LoginPartial")
@@ -37,7 +45,7 @@
         </div>
     </div>
     <div class="container body-content">
-        <main>
+        <main id="main">
             @RenderBody()
         </main>      
         <hr />
@@ -53,7 +61,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.1.0/knockout-min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout.mapping/2.4.1/knockout.mapping.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.6.0/underscore-min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout-validation/1.0.2/knockout.validation.min.js"></script>
-            @Scripts.Render("~/bundles/DHW")
-            @RenderSection("scripts", required: false)</body>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout-validation/1.0.2/knockout.validation.js"></script>
+    @Scripts.Render("~/bundles/beta")
+    @RenderSection("scripts", required: false)
+</body>
 </html>

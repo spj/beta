@@ -15,5 +15,9 @@ namespace beta.Controllers {
             return View();
         }
 
+        public PartialViewResult GetView(string id)
+        {
+            return PartialView(id);
+        }
     }
 }
