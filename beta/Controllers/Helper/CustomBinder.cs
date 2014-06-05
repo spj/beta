@@ -5,7 +5,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
-namespace DHW.Controllers.Helper
+namespace beta.Controllers.Helper
 {
     public class DecimalModelBinder : DefaultModelBinder
     {
