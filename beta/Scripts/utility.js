@@ -126,3 +126,14 @@ function getAddressInfoByZip(zip) {
         });
     }).promise();
 }
+
+//ko
+ko.extenders.reset = function (target) {
+    var initialValue = target();
+
+    target.reset = function () {
+        target(initialValue);
+    }
+
+    return target;
+};
