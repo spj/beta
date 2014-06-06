@@ -8,8 +8,8 @@ ko.validation.rules['passwordComplexity'] = {
 
 ko.validation.configure({
     registerExtenders: true,
-    messagesOnModified: true,
-    insertMessages: true,
+    errorsAsTitleOnModified: true,
+    insertMessages: false,
     parseInputAttributes: true,
-    messageTemplate: null
+    decorateElement: true
 });

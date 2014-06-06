@@ -33,10 +33,11 @@ input[type="checkbox"].input-validation-error {
     border: 0 none;
 }
 
-.validation-summary-errors {
-    color: #b94a48;
+.validationElement, .validationMessage {
+    color: red;
 }
 
 .validation-summary-valid {
     display: none;
 }
+

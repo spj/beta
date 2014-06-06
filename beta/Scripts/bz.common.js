@@ -18,3 +18,9 @@ function koresetArray(val) {
 function korequiretArray(val) {
     return val ? ko.observableArray(val).extend({ reset: true, require: true }) : ko.observableArray().extend({ reset: true, require: true });
 }
+
+function showNotify(msg) {
+    $('.bottom-right').notify({
+        message: { text: msg }
+    }).show();
+}
