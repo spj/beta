@@ -156,7 +156,7 @@ namespace beta.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Register(string data)
+        public async Task<string> Register(string data)
         {
             RegisterViewModel model = JsonConvert.DeserializeObject<RegisterViewModel>(data);
             var user = new ApplicationUser { UserName = model.UserName, Email = model.Email, LockoutEnabled = true, TwoFactorEnabled = true, PhoneNumber=model.PhoneNumber };
@@ -164,24 +164,37 @@ namespace beta.Controllers
             if (result.Succeeded)
             {
                 new Account().RegisterUserDealer(user.Id, model.Dealer);
-                var code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
-                // await Task.WhenAll(code, token);
-                var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
-                if (user.TwoFactorEnabled)
-                {
-                    var token = await UserManager.GenerateTwoFactorTokenAsync(user.Id, "EmailCode");
-                    await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking this link: <a href=\"" + callbackUrl + "\">link</a>.<br> Verify code:" + token);
-                }
-                await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking this link: <a href=\"" + callbackUrl + "\">link</a>");
+                //var code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
+                //// await Task.WhenAll(code, token);
+                //var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
+                //if (user.TwoFactorEnabled)
+                //{
+                //    var token = await UserManager.GenerateTwoFactorTokenAsync(user.Id, "EmailCode");
+                //    await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking this link: <a href=\"" + callbackUrl + "\">link</a>.<br> Verify code:" + token);
+                //}
+                //else
+                //await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking this link: <a href=\"" + callbackUrl + "\">link</a>");
 
-                ViewBag.Link = callbackUrl;
-                return View("DisplayEmail");
+                //ViewBag.Link = callbackUrl;
+                //return View("DisplayEmail");
             }
-
-            // If we got this far, something failed, redisplay form
-            return View(model);
+            return user.Id;
         }
 
+        //
+        // POST: /Account/Register
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> SendEmail(string uid)
+        {
+            var code = await UserManager.GenerateEmailConfirmationTokenAsync(uid);
+            // await Task.WhenAll(code, token);
+            var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = uid, code = code }, protocol: Request.Url.Scheme);
+            var token = await UserManager.GenerateTwoFactorTokenAsync(uid, "EmailCode");
+            await UserManager.SendEmailAsync(uid, "Confirm your account", "Please confirm your account by clicking this link: <a href=\"" + callbackUrl + "\">link</a>.<br> Verify code:" + token);
+            return new EmptyResult();
+        }
         //
         // GET: /Account/ConfirmEmail
         [AllowAnonymous]

@@ -11,8 +11,11 @@
     this.errors = ko.validation.group(this);
     this.submit = function (form) {
         if (this.errors().length == 0) {
-            $.post(String.format("/Account/Register"), { data: ko.toJSON(this) }).done(function () {
+            $.post(String.format("/Account/Register"), { data: ko.toJSON(this) }).done(function (data) {
+                $.post(String.format("/Account/SendEmail"), { uid: data });
 
+            }).fail(function (xhr, status, error) {
+                alert(xhr.responseText);
             });
         } else {
             this.errors.showAllMessages();
