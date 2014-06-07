@@ -12,7 +12,9 @@
     this.submit = function (form) {
         if (this.errors().length == 0) {
             $.post(String.format("/Account/Register"), { data: ko.toJSON(this) }).done(function (data) {               
-                showNotify(data);
+                $.post(String.format("/Account/SendRegisterEmail"), { uid: data });
+                _self.reset();
+                showNotify('Please check your email!');
             }).fail(function (xhr, status, error) {
                 showNotify(xhr.responseText);
             });
@@ -32,11 +34,9 @@ var ForgotPasswordViewModel = function () {
     this.errors = ko.validation.group(this);
     this.submit = function (form) {
         if (this.errors().length == 0) {
-            this.returnUrl = beta.global.returnUrl;
             $.post(String.format("/Account/ForgotPassword"), { email: this.email() })
             .done(function (data) {
-                $.post(String.format("/Account/SendEmail"), { uid: data });
-                showNotify('Please check your email!');
+                showNotify(data);
             }).fail(function (xhr, status, error) {
                 showNotify(xhr.responseText);
             });
