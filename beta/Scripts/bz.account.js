@@ -11,9 +11,8 @@
     this.errors = ko.validation.group(this);
     this.submit = function (form) {
         if (this.errors().length == 0) {
-            $.post(String.format("/Account/Register"), { data: ko.toJSON(this) }).done(function (data) {
-                $.post(String.format("/Account/SendEmail"), { uid: data });
-                showNotify('Please check your email!');
+            $.post(String.format("/Account/Register"), { data: ko.toJSON(this) }).done(function (data) {               
+                showNotify(data);
             }).fail(function (xhr, status, error) {
                 showNotify(xhr.responseText);
             });
@@ -27,10 +26,30 @@
 
 }
 
+var ForgotPasswordViewModel = function () {
+    var _self = this;
+    this.email = korequire().extend({ email: true });
+    this.errors = ko.validation.group(this);
+    this.submit = function (form) {
+        if (this.errors().length == 0) {
+            this.returnUrl = beta.global.returnUrl;
+            $.post(String.format("/Account/ForgotPassword"), { email: this.email() })
+            .done(function (data) {
+                $.post(String.format("/Account/SendEmail"), { uid: data });
+                showNotify('Please check your email!');
+            }).fail(function (xhr, status, error) {
+                showNotify(xhr.responseText);
+            });
+        } else {
+            this.errors.showAllMessages();
+        }
+    };
+}
 function loadRegister() {
-    gotoController('Account', 'Register').done(function () {
-        ko.applyBindings(new RegisterViewModel(), $('#main>form')[0]);
-    });
+    loadView('Account', 'Register',new RegisterViewModel());
+}
 
+function forgotPassword() {
+    loadView('Account', 'ForgotPassword', new ForgotPasswordViewModel());
 }
 //# sourceURL=bz.account.js

@@ -6,6 +6,14 @@ function gotoController(controller, view) {
    return loadTemplate(_container, _url);
 }
 
+function loadView(controller, view, model, bindingTarget) {
+    gotoController(controller, view).done(function () {
+        bindingTarget = bindingTarget || $('#main form')[0];
+        ko.applyBindings(model, bindingTarget);
+    });
+}
+
+
 function koreset(val) {
     return val ? ko.observable(val).extend({ reset: true }) : ko.observable().extend({ reset: true });
 }
