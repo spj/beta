@@ -159,7 +159,7 @@ namespace beta.Controllers
         public async Task<string> Register(string data)
         {
             RegisterViewModel model = JsonConvert.DeserializeObject<RegisterViewModel>(data);
-            var user = new ApplicationUser { UserName = model.UserName, Email = model.Email, LockoutEnabled = true, TwoFactorEnabled = true, PhoneNumber=model.PhoneNumber };
+            var user = new ApplicationUser { FullName=model.UserName, UserName = model.Email, Email = model.Email, LockoutEnabled = true, TwoFactorEnabled = true, PhoneNumber=model.PhoneNumber };
             var result = await UserManager.CreateAsync(user, model.Password);
             if (result.Succeeded)
             {
@@ -229,7 +229,7 @@ namespace beta.Controllers
         public async Task<string> ForgotPassword(string email)
         {
             string msg = "Please check your email!";
-            var user = await UserManager.FindByEmailAsync(email);
+            var user = await UserManager.FindByNameAsync(email);
             if (user == null || !(await UserManager.IsEmailConfirmedAsync(user.Id)))
             {
                 // Don't reveal that the user does not exist or is not confirmed

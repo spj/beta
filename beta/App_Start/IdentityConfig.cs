@@ -216,7 +216,7 @@ namespace beta.Models
 
             var user = userManager.FindByName(name);
             if (user == null) {
-                user = new ApplicationUser { UserName = name, Email = name };
+                user = new ApplicationUser { UserName = name, Email = name, FullName=name };
                 var result = userManager.Create(user, password);
                 result = userManager.SetLockoutEnabled(user.Id, false);
             }
@@ -351,9 +351,9 @@ namespace beta.Models
 
         }
 
-        public async Task<SignInStatus> PasswordSignIn(string email, string password, bool isPersistent, bool shouldLockout)
+        public async Task<SignInStatus> PasswordSignIn(string username, string password, bool isPersistent, bool shouldLockout)
         {
-            var user = await UserManager.FindByEmailAsync(email);
+            var user = await UserManager.FindByNameAsync(username);
             if (user == null)
             {
                 return SignInStatus.Failure;
