@@ -1,4 +1,5 @@
 ﻿
+
 $(window).bind('statechange', function () {
     var state = History.getState();
     var _currentIdx = History.getCurrentIndex();

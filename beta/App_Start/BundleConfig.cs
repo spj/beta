@@ -22,8 +22,7 @@ namespace beta
             //          "~/Scripts/bootstrap.js",
             //          "~/Scripts/respond.js"));
             bundles.Add(new ScriptBundle("~/bundles/beta").Include(
-                "~/Scripts/utility.js", "~/Scripts/bz.common.js", "~/Scripts/bz.validator.rules.js",
-                "~/Scripts/bootstrap-notify.js", "~/Scripts/history.js", "~/Scripts/history.adapter.jquery.js"));
+                "~/Scripts/utility.js", "~/Scripts/common/*.js"));
             bundles.Add(new ScriptBundle("~/bundles/beta.account").Include(
       "~/Scripts/bz.account.js"));
             bundles.Add(new StyleBundle("~/Content/css").Include(
