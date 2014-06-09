@@ -7,6 +7,27 @@
 </hgroup>
 <div class="row-fluid">
     <div class="span12">
+        <p id="nonsupport" style="display:none">
+            <strong>You are using IE 9 or lower</strong>, which is not supported. Please upgrade to IE10+.  To achieve the full experience we highly recommend
+            <i>Google Chrome</i> (download <strong>
+                <a href="https://www.google.com/intl/en/chrome/browser/" target="_blank">here</a>
+            </strong>).
+            If you need assistance please contact us for more information.  Thanks
+        </p>
+    </div>
+</div>
+<div class="row-fluid">
+    <div class="span12">
         <p>Use this area to provide additional information.</p>
     </div>
 </div>
+@section scripts{
+<script>
+    $(function () {
+        if (BrowserDetect.browser == 'Explorer' && BrowserDetect.version <= 9) {
+            $("#nonsupport").show();
+            $('#login').hide();
+        }
+    });
+    </script>   
+}
