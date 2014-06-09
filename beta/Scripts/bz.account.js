@@ -1,5 +1,6 @@
 ﻿var RegisterViewModel = function () {
     var _self = this;
+    this.modelName = 'RegisterViewModel';
     this.dealer = korequire();
     this.email = korequire().extend({ email: true });
     this.phoneNumber = korequire().extend({phoneUS:true});
@@ -30,6 +31,7 @@
 
 var ForgotPasswordViewModel = function () {
     var _self = this;
+    this.modelName = 'ForgotPasswordViewModel';
     this.email = korequire().extend({ email: true });
     this.errors = ko.validation.group(this);
     this.submit = function (form) {
@@ -46,7 +48,7 @@ var ForgotPasswordViewModel = function () {
     };
 }
 function loadRegister() {
-    loadView('Account', 'Register',new RegisterViewModel());
+    loadView('Account', 'Register', new RegisterViewModel());
 }
 
 function forgotPassword() {

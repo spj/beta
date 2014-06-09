@@ -23,22 +23,22 @@
                 @if (Request.IsAuthenticated)
                 {
                      @*@Html.ActionLink("Home", "Home", "Home",null, new { @class = "navbar-brand" })*@
-    <a class="navbar-brand" href="#" onclick="gotoController('Home','Home')">Home</a>
+    <a class="navbar-brand" href="#" onclick="loadView('Home','Home')">Home</a>
                 }
                 else
                 {
                     @*@Html.ActionLink("Application name", "Index", "Home", null, new { @class = "navbar-brand" })*@
-                      <a class="navbar-brand" href="#" onclick="gotoController('Home')">Home</a>
+                      <a class="navbar-brand" href="#" onclick="loadView('Home')">Home</a>
                 }
             </div>
             <div class="navbar-collapse collapse">                                 
                     @if (Request.IsAuthenticated && User.IsInRole("Admin"))
                     {
                         <ul class="nav navbar-nav">
-                            @*<li>@Html.ActionLink("RolesAdmin", "Index", "RolesAdmin")</li>
-                            <li>@Html.ActionLink("UsersAdmin", "Index", "UsersAdmin")</li>*@
-                            <li><a href="#" onclick="gotoController('RolesAdmin')">Roles</a></li>
-                            <li><a href="#" onclick="gotoController('UsersAdmin')">Users</a></li>
+                            <li>@Html.ActionLink("RolesAdmin", "Index", "RolesAdmin")</li>
+                            <li>@Html.ActionLink("UsersAdmin", "Index", "UsersAdmin")</li>
+                            @*<li><a href="#" onclick="loadView('RolesAdmin')">Roles</a></li>
+    <li><a href="#" onclick="loadView('UsersAdmin')">Users</a></li>*@
                         </ul>
                     }
                 @Html.Partial("_LoginPartial")

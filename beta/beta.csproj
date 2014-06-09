@@ -178,6 +178,8 @@
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\bz.account.js" />
     <Content Include="Scripts\bz.common.js" />
+    <Content Include="Scripts\history.adapter.jquery.js" />
+    <Content Include="Scripts\history.js" />
     <Content Include="Scripts\utility.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />

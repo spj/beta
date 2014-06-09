@@ -1,15 +1,37 @@
 ﻿
-function gotoController(controller, view) {
+$(window).bind('statechange', function () {
+    var state = History.getState();
+    var _currentIdx = History.getCurrentIndex();
+    // returns { data: { params: params }, title: "Search": url: "?search" }
+    var _data = state.data;
+    if (!hasNoValue(_data.controller) && _currentIdx != _data.idx + 1) {
+        if (_data.modelName) {
+            var _modelData = ko.mapping.fromJSON(sessionStorage.getItem(_data.modelName));
+            var _model = new window[_data.modelName]();
+            $.extend(_model, _modelData);
+        }
+        loadView(_data.controller, _data.view, _model, _data.bindingTarget, true);
+    }
+});
+
+function loadView(controller, view, model, bindingTarget, history) {
     view = view || "index";
     var _container = $('#main');
-    var _url = String.format("/{0}/GetView/{1}",controller,view);
-   return loadTemplate(_container, _url);
-}
-
-function loadView(controller, view, model, bindingTarget) {
-    gotoController(controller, view).done(function () {
-        bindingTarget = bindingTarget || $('#main form')[0];
-        ko.applyBindings(model, bindingTarget);
+    var _url = String.format("/{0}/GetView/{1}", controller, view);
+    loadTemplate(_container, _url).done(function () {
+        if (model) {
+            bindingTarget = bindingTarget || '#main form';
+            ko.applyBindings(model, $(bindingTarget)[0]);
+        }
+        if (!history) {
+            var _url = String.format("/{0}/{1}", controller, view);
+            History.pushState({ idx: History.getCurrentIndex(), controller: controller, view: view, modelName: hasNoValue(model)?null:model.modelName, bindingTarget: bindingTarget }, view, _url);
+            if (model) {
+                if (model.errors)
+                    delete model.errors;
+                sessionStorage.setItem(model.modelName, ko.mapping.toJSON(model));
+            }
+        }
     });
 }
 
