@@ -22,8 +22,12 @@
                 </button>
                 @if (Request.IsAuthenticated)
                 {
+                    if (!User.IsInRole("Admin"))
+                    {
+                        <a class="navbar-brand" href="#" onclick="loadView('Home','Home')">Home</a>
+                    }
                      @*@Html.ActionLink("Home", "Home", "Home",null, new { @class = "navbar-brand" })*@
-    <a class="navbar-brand" href="#" onclick="loadView('Home','Home')">Home</a>
+                     
                 }
                 else
                 {
@@ -36,9 +40,8 @@
                     {
                         <ul class="nav navbar-nav">
                             <li>@Html.ActionLink("RolesAdmin", "Index", "RolesAdmin")</li>
-                            <li>@Html.ActionLink("UsersAdmin", "Index", "UsersAdmin")</li>
-                            @*<li><a href="#" onclick="loadView('RolesAdmin')">Roles</a></li>
-    <li><a href="#" onclick="loadView('UsersAdmin')">Users</a></li>*@
+                            @*<li>@Html.ActionLink("UsersAdmin", "Index", "UsersAdmin")</li>*@
+                            <li>@*<a href="#" onclick="loadView('RolesAdmin')">Roles</a>*@</li>
                         </ul>
                     }
                 @Html.Partial("_LoginPartial")

@@ -65,12 +65,6 @@ function forgotPassword() {
     loadView('Account', 'ForgotPassword', new ForgotPasswordViewModel());
 }
 
-function SendVerifyCode() {
-    $.post('@Url.Action("SendCode")', {}).done(function () {
-        showNotify('Please check your email!');
-    });
-}
-
 var _typeaheadObjects = [];
 var dealerTypeaheadHelper = function () {
     return {
