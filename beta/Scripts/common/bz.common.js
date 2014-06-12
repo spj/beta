@@ -71,7 +71,7 @@ function submitData(model) {
     }
     else
         if (model.pick)
-            _obj = _(model).pick(_.union( model.pick,["pick","errors"]));
+            _obj = _(model).pick( model.pick));
 
     return ko.toJSON(_obj);
 }
