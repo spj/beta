@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DBRepository
+namespace beta.DBRepository
 {
     public static class DBContext
     {

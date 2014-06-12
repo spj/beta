@@ -5,7 +5,7 @@
     <div class="form-group">
         <label class="col-md-2 control-label">Dealer</label>       
         <div class="col-md-10">
-            <input type="text" data-bind="value:dealer" class="form-control" />
+            <input type="text" data-bind="value:dealerName, typeahead: dealerTypeaheadHelper, event:{change:dealerNameValidator}" class="form-control" autocomplete="off" />
         </div>
     </div>
     <div class="form-group">

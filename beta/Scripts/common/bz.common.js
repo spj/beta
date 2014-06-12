@@ -22,14 +22,13 @@ function loadView(controller, view, model, bindingTarget, history) {
     loadTemplate(_container, _url).done(function () {
         if (model) {
             bindingTarget = bindingTarget || '#main form';
+            model.errors = ko.validation.group(model);
             ko.applyBindings(model, $(bindingTarget)[0]);
         }
         if (!history) {
             var _url = String.format("/{0}/{1}", controller, view);
             History.pushState({ idx: History.getCurrentIndex(), controller: controller, view: view, modelName: hasNoValue(model)?null:model.modelName, bindingTarget: bindingTarget }, view, _url);
             if (model) {
-                if (model.errors)
-                    delete model.errors;
                 sessionStorage.setItem(model.modelName, ko.mapping.toJSON(model));
             }
         }
@@ -54,4 +53,25 @@ function showNotify(msg) {
     $('.bottom-right').notify({
         message: { text: msg }
     }).show();
+}
+
+function getTypeAheadFromJson(data, property) {
+    if (property)
+        return $.map(data, function (n, i) {
+            return n[property];
+        });
+    else
+        return data;
+}
+
+function submitData(model) {
+    var _obj = model;
+    if (model.omit) {
+        _obj = _(model).omit(_.union(model.omit,["omit","errors"]));
+    }
+    else
+        if (model.pick)
+            _obj = _(model).pick(_.union( model.pick,["pick","errors"]));
+
+    return ko.toJSON(_obj);
 }
