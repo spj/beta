@@ -2,10 +2,12 @@
 using System.Web.Mvc;
 
 namespace beta.Controllers {
+    //[Route("{action=Index}/{id?}")]
     public class HomeController : SessionlessController {
         [Authorize]
-        public ActionResult Home()
+        public ActionResult Home(string id)
         {
+
             return View();
         }
 

@@ -14,8 +14,7 @@ using Newtonsoft.Json;
 
 namespace beta.Controllers
 {
-    [Authorize]
-    public class AccountController : Controller
+    public class AccountController : SessionlessController
     {
         public AccountController()
         {
