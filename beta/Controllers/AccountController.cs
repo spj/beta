@@ -155,7 +155,7 @@ namespace beta.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<string> Register(string data)
+        public async Task<ActionResult> Register(string data)
         {
             RegisterViewModel model = JsonConvert.DeserializeObject<RegisterViewModel>(data);
             var user = new ApplicationUser { FullName=model.UserName, UserName = model.Email, Email = model.Email, LockoutEnabled = true, TwoFactorEnabled = true, PhoneNumber=model.PhoneNumber };
@@ -163,21 +163,21 @@ namespace beta.Controllers
             if (result.Succeeded)
             {
                 new Account().RegisterUserDealer(user.Id, model.Dealer);
-                //var code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
+                var code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
                 //// await Task.WhenAll(code, token);
-                //var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
-                //if (user.TwoFactorEnabled)
-                //{
-                //    var token = await UserManager.GenerateTwoFactorTokenAsync(user.Id, "EmailCode");
-                //    await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking this link: <a href=\"" + callbackUrl + "\">link</a>.<br> Verify code:" + token);
-                //}
-                //else
-                //await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking this link: <a href=\"" + callbackUrl + "\">link</a>");
+                var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
+                if (user.TwoFactorEnabled)
+                {
+                    var token = await UserManager.GenerateTwoFactorTokenAsync(user.Id, "EmailCode");
+                    await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking this link: <a href=\"" + callbackUrl + "\">link</a>.<br> Verify code:" + token);
+                }
+                else
+                    await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking this link: <a href=\"" + callbackUrl + "\">link</a>");
 
                 //ViewBag.Link = callbackUrl;
                 //return View("DisplayEmail");
             }
-            return user.Id;
+            return new EmptyResult();
         }
 
         //
