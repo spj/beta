@@ -18,3 +18,14 @@ else {
         <li><a href="#" onclick="loadView('Account', 'Login')">Log in</a></li>
     </ul>
 }
+@if (Request.IsAuthenticated)
+{
+    using (Html.BeginScripts())
+    {
+        <script>
+            getUserDealers('@User.Identity.GetUserName()');
+        </script>
+    }
+}
+
+

@@ -269,6 +269,7 @@
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="Views\HtmlHelper\HtmlHelperExt.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DBRepository\DBRepository.csproj">
