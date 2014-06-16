@@ -1,4 +1,5 @@
-﻿using System;
+﻿using beta.DomainModels;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
@@ -28,6 +29,37 @@ namespace beta.DBRepository
                 cmd.Connection = conn;
                 cmd.ExecuteNonQuery();
             }
+        }
+
+        public UserDealerModel GetUserDealers(string user)
+        {
+            List<string> _dealerIDs = new List<string>();
+            UserDealerModel _userDealers = new UserDealerModel();
+            _userDealers.Dealers = new List<string>();
+            SqlParameter sql_user = new SqlParameter("@username", SqlDbType.NVarChar);
+            sql_user.Value = user;
+
+            SqlCommand cmd = new SqlCommand();
+            cmd.CommandText = "getUserDealers";
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.Add(sql_user);
+            using (SqlConnection conn = new SqlConnection(DBContext.DefaultConnection))
+            {
+                if (conn.State == ConnectionState.Closed) conn.Open();
+                cmd.Connection = conn;
+                using (SqlDataReader reader = cmd.ExecuteReader())
+                {
+                    if (reader.HasRows)
+                    {
+                        while (reader.Read())
+                        {                            
+                            _userDealers.UserFullName = reader.GetString(0);
+                            _userDealers.Dealers.Add(reader.GetString(1));
+                        }
+                    }
+                }
+            }
+            return _userDealers;
         }
     }
 }

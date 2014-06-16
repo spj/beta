@@ -35,7 +35,6 @@ function loadView(controller, view, model, bindingTarget, history) {
     });
 }
 
-
 function koreset(val) {
     return val ? ko.observable(val).extend({ reset: true }) : ko.observable().extend({ reset: true });
 }
@@ -74,4 +73,18 @@ function submitData(model) {
             _obj = _(model).pick( model.pick);
 
     return ko.toJSON(_obj);
+}
+
+function getUserDealers(user) {
+    $.getJSON("/Independent/GetUserDealers", { user: user }).done(function (data) {
+        var _uobj = { email: user, fullname: data.UserFullName };
+        _uobj.dealer = ko.observable(data.Dealers[0]);
+        _uobj.dealers = data.Dealers;
+        beta.global.currentuser = _uobj;
+        beta.global.currentuser.change = function (dealer) {
+            beta.global.currentuser.dealer(dealer);
+        };
+        ko.applyBindings(beta.global.currentuser, $('#currentuser')[0]);
+    });
+
 }

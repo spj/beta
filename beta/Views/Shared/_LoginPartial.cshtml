@@ -3,10 +3,20 @@
     using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" })) {
         @Html.AntiForgeryToken()
 
-        <ul class="nav navbar-nav navbar-right">
+        <ul id="currentuser" class="nav navbar-nav navbar-right">
+            <li>
+                <a href="#" class="btn dropdown-toggle" data-toggle="dropdown">
+                    <span data-bind="text:dealer().Name"></span>
+                    <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu" role="menu" data-bind="foreach:dealers">
+                    <li role="presentation"><a role="menuitem" tabindex="-1" href="#" data-bind="text:Name, click:$parent.change"></a></li>
+                </ul>
+            </li>
             <li>
                 @*@Html.ActionLink("Hello " + User.Identity.GetUserName() + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })*@
-                <a href="#">Hello @User.Identity.GetUserName()!</a>
+                @*<a href="#">Hello @User.Identity.GetUserName()!</a>*@
+                <a data-bind="text:fullname"></a>
             </li>
             <li><a href="javascript:sessionStorage.clear();document.getElementById('logoutForm').submit()">Log off</a></li>
         </ul>

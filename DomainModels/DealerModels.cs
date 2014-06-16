@@ -25,4 +25,10 @@ namespace beta.DomainModels
         public string Settings {get;set;}
         public string Language { get; set; }
     }
+
+    public class UserDealerModel
+    {
+        public string UserFullName { get; set; }
+        public List<string> Dealers { get; set; }
+    }
 }
