@@ -4,6 +4,7 @@
         @Html.AntiForgeryToken()
 
         <ul id="currentuser" class="nav navbar-nav navbar-right">
+            @if (!User.IsInRole("Admin")) { 
             <li>
                 <a href="#" class="btn dropdown-toggle" data-toggle="dropdown">
                     <span data-bind="text:dealer().Name"></span>
@@ -18,6 +19,7 @@
                 @*<a href="#">Hello @User.Identity.GetUserName()!</a>*@
                 <a data-bind="text:fullname"></a>
             </li>
+            }
             <li><a href="javascript:sessionStorage.clear();document.getElementById('logoutForm').submit()">Log off</a></li>
         </ul>
     }
@@ -28,7 +30,7 @@ else {
         <li><a href="#" onclick="loadView('Account', 'Login')">Log in</a></li>
     </ul>
 }
-@if (Request.IsAuthenticated)
+@if (Request.IsAuthenticated && !User.IsInRole("Admin"))
 {
     using (Html.BeginScripts())
     {
