@@ -61,5 +61,33 @@ namespace beta.DBRepository
             }
             return _userDealers;
         }
+
+        public List<DealerUserModel> GetUsers(string dealer)
+        {
+            List<DealerUserModel> _users = new List<DealerUserModel>();
+            SqlParameter sql_dealer = new SqlParameter("@dealer", SqlDbType.VarChar);
+            sql_dealer.Value = dealer;
+
+            SqlCommand cmd = new SqlCommand();
+            cmd.CommandText = "getDealerUsers";
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.Add(sql_dealer);
+            using (SqlConnection conn = new SqlConnection(DBContext.DefaultConnection))
+            {
+                if (conn.State == ConnectionState.Closed) conn.Open();
+                cmd.Connection = conn;
+                using (SqlDataReader reader = cmd.ExecuteReader())
+                {
+                    if (reader.HasRows)
+                    {
+                        while (reader.Read())
+                        {
+                            _users.Add(new DealerUserModel() { UID = reader.GetString(0), Email=reader.GetString(1), UName = reader.GetString(2) });
+                        }
+                    }
+                }
+            }
+            return _users;
+        }
     }
 }

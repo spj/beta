@@ -12,13 +12,8 @@ using System.Collections.Generic;
 namespace beta.Controllers
 {
     [Authorize(Roles = "Admin")]
-    public class RolesAdminController : Controller
+    public class RolesAdminController : SessionlessController
     {
-        public PartialViewResult GetView(string id)
-        {
-            return PartialView(id);
-        }
-
         #region sample
         public RolesAdminController()
         {

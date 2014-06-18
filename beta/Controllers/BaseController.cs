@@ -16,6 +16,11 @@ namespace beta.Controllers
     {
          protected static Logger logger = LogManager.GetCurrentClassLogger();
          protected static CacheModel CacheData = null;
+         [AllowAnonymous]
+         public PartialViewResult GetView(string id)
+         {
+             return PartialView(id);
+         }
          protected override void OnActionExecuting(ActionExecutingContext filterContext)
          {
              base.OnActionExecuting(filterContext);

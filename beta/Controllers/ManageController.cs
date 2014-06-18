@@ -10,13 +10,9 @@ using System.Web.Mvc;
 namespace beta.Controllers
 {
     [Authorize]
-    public class ManageController : Controller
+    public class ManageController : SessionlessController
     {
-        public PartialViewResult GetView(string id)
-        {
-            return PartialView(id);
-        }
-        #region sample
+         #region sample
         public ManageController()
         {
         }

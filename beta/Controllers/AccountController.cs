@@ -24,11 +24,6 @@ namespace beta.Controllers
         {
             UserManager = userManager;
         }
-        [AllowAnonymous]
-        public PartialViewResult GetView(string id)
-        {
-            return PartialView(id);
-        }
 
         #region sample
         private ApplicationUserManager _userManager;

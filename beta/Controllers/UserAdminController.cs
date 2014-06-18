@@ -10,15 +10,17 @@ using System.Net;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using beta.ViewModels;
 
 namespace beta.Controllers
 {
-    [Authorize(Roles = "Admin")]
-    public class UsersAdminController : Controller
+    [Authorize(Roles = "UserManagement")]    
+    public class UsersAdminController : SessionlessController
     {
-        public PartialViewResult GetView(string id)
+        [Route("GetDealerUsers/{dealer}")]
+        public JsonResult GetDealerUsers(string dealer)
         {
-            return PartialView(id);
+            return Json((new DealerUserViewModel(dealer)).Users, JsonRequestBehavior.AllowGet);
         }
 
         #region sample
@@ -60,7 +62,7 @@ namespace beta.Controllers
 
         //
         // GET: /Users/
-        public async Task<ActionResult> Index()
+        public async Task<ActionResult> Index(string dealer)
         {
             return View(await UserManager.Users.ToListAsync());
         }

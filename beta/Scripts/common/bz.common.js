@@ -21,7 +21,7 @@ function loadView(controller, view, model, bindingTarget, history) {
     var _url = String.format("/{0}/GetView/{1}", controller, view);
     loadTemplate(_container, _url).done(function () {
         if (model) {
-            bindingTarget = bindingTarget || '#main form';
+            bindingTarget = bindingTarget || '#main form,#main .bindingTarget';
             model.errors = ko.validation.group(model);
             ko.applyBindings(model, $(bindingTarget)[0]);
         }
@@ -75,6 +75,7 @@ function submitData(model) {
     return ko.toJSON(_obj);
 }
 
+//layout
 function getUserDealers(user) {
     $.getJSON("/Independent/GetUserDealers", { user: user }).done(function (data) {
         var _uobj = { email: user, fullname: data.UserFullName };
@@ -85,6 +86,21 @@ function getUserDealers(user) {
             beta.global.currentuser.dealer(dealer);
         };
         ko.applyBindings(beta.global.currentuser, $('#currentuser')[0]);
+    });
+
+}
+
+var DealerUserModel = function () {
+    this.users = ko.observableArray();
+}
+
+function loadUserAdmin() {
+    var model = new DealerUserModel();
+    loadView("UsersAdmin", "List", model),
+    $.getJSON(String.format("/GetDealerUsers/{0}", beta.global.currentuser.dealer().DealerID)).done(function (data) {
+        $.each(data, function () {
+            model.users.push(this);
+        });
     });
 
 }

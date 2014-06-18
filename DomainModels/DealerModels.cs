@@ -31,4 +31,5 @@ namespace beta.DomainModels
         public string UserFullName { get; set; }
         public List<string> Dealers { get; set; }
     }
+
 }

@@ -41,7 +41,9 @@
                             }
                             else { 
                             @*<li>@Html.ActionLink("UsersAdmin", "Index", "UsersAdmin")</li>*@
-                            <li><a href="#" onclick="loadView('UsersAdmin')">Users</a></li>
+                                if (User.IsInRole("UserManagement")) {
+                                    <li><a href="#" onclick="loadUserAdmin()">Users</a></li>
+                                }
                             }
                         </ul>
                     }
