@@ -162,6 +162,7 @@
     <Content Include="NLog.config" />
     <Content Include="Scripts\common\CryptoJS.AES.js" />
     <Content Include="Scripts\common\knockout.reactor.js" />
+    <Content Include="Scripts\common\layout.js" />
     <Content Include="Views\UsersAdmin\List.cshtml" />
     <Content Include="Scripts\bz.userAdmin.js" />
     <None Include="Web.Debug.config">
