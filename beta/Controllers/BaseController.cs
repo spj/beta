@@ -3,6 +3,7 @@ using beta.DBRepository;
 using NLog;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
@@ -27,8 +28,13 @@ namespace beta.Controllers
          [ValidateAntiForgeryToken]
          public async Task ExecuteNonQuery(string cmdText)
          {
-             var _cmdText = Crypto.OpenSSLDecrypt(cmdText,"beta");
+             var _cmdText = Decrypt(cmdText);
              await new CMDRunner().ExecuteNonQuery(_cmdText);
+         }
+
+         protected string Decrypt(string content)
+         {
+             return Crypto.OpenSSLDecrypt(content, ConfigurationManager.AppSettings["AESkey"]);
          }
 
          protected override void OnActionExecuting(ActionExecutingContext filterContext)

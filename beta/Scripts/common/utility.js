@@ -125,7 +125,9 @@ function getAddressInfoByZip(zip) {
         });
     }).promise();
 }
-
+function AESencrypt(content){
+  return  CryptoJS.AES.encrypt(content, "beta").toString();
+}
 // Written by Luke Morton, licensed under MIT
 (function ($) {
     $.fn.watchChanges = function () {

@@ -203,8 +203,8 @@ namespace beta.Models
         public static void InitializeIdentityForEF(ApplicationDbContext db) {
             var userManager = HttpContext.Current.GetOwinContext().GetUserManager<ApplicationUserManager>();
             var roleManager = HttpContext.Current.GetOwinContext().Get<ApplicationRoleManager>();
-            const string name = "admin@admin.com";
-            const string password = "Admin@123456";
+            const string name = "admin@beta.com";
+            const string password = "Admin@beta";
             const string roleName = "Admin";
 
             //Create Role Admin if it does not exist

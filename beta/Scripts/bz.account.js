@@ -1,6 +1,6 @@
 ﻿var RegisterViewModel = function () {
     var _self = this;
-    this.omit = ["modelName", "dealerName", "dealerObj", "confirmPassword"];
+    this.omit = ["modelName", "dealerName", "dealerObj", "confirmPassword","clearPassword"];
     this.modelName = 'RegisterViewModel';
     this.dealerName = korequire();
     this.dealerObj = korequire();
@@ -8,9 +8,10 @@
     this.email = korequire().extend({ email: true });
     this.phoneNumber = korequire().extend({phoneUS:true});
     this.userName = korequire();
-    this.password = korequire().extend({passwordComplexity:true});
+    this.clearPassword = korequire().extend({ passwordComplexity: true });
+    this.password = null;
     this.confirmPassword = korequire().extend({ 
-        equal:{ message: 'Passwords do not match.', params: this.password }
+        equal:{ message: 'Passwords do not match.', params: this.clearPassword }
     });
     //errors set in dealerName.subscribe is reset
     this.dealerNameValidator = function () {
@@ -22,6 +23,7 @@
     };
     this.submit = function (form) {
         if (this.errors().length == 0) {
+            this.password = AESencrypt(this.clearPassword());
             $.post(String.format("/Account/Register"), { data: submitData(this) }).done(function (data) {
                 //$.post(String.format("/Account/SendRegisterEmail"), { uid: data });
                 _self.reset();
