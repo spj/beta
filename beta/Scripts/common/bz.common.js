@@ -104,7 +104,7 @@ var DealerUserModel = function () {
             _userViewModel.id = user.UID;
             setOriginal(_userViewModel.email,user.Email);
             setOriginal(_userViewModel.fullname,user.UName);
-            setOriginal(_userViewModel.lockout,hasNoValue(user.LockoutEndDate));
+            setOriginal(_userViewModel.lockout,!hasNoValue(user.LockoutEndDate));
             setOriginal(_userViewModel.dealers, data.dealers, function (obj) {
                 return _.difference(_(getOrignal(obj)).pluck("DealerID"), _(obj()).pluck("DealerID")).length > 0;
             });
@@ -231,16 +231,15 @@ var UserViewModel = function () {
     };
     this.roles = korequireArray();
     this.submit = function (form) {
-        if (this.errors().length == 0 && this.dirty()) {
-            console.log(this.sqlcmd);
-            //var _changes = getChangesFromModel(this);
-            $.post(String.format("/Account/Register"), { data: submitData(this) }).done(function (data) {
-                //$.post(String.format("/Account/SendRegisterEmail"), { uid: data });
-                _self.reset();
-                showNotify('Please check your email!');
-            }).fail(function (xhr, status, error) {
-                showNotify(xhr.responseText);
-            });
+        if (this.errors().length == 0 ){
+            if(this.dirty()) {
+                console.log(this.sqlcmd);
+                //var _changes = getChangesFromModel(this);
+                $.post("/ExecuteNonQuery", { cmdText: this.sqlcmd }).done(function (data) {                  
+                }).fail(function (xhr, status, error) {
+                    showNotify(xhr.responseText);
+                });
+            }
         } else {
             this.errors.showAllMessages();
         }

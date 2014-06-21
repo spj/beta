@@ -44,6 +44,7 @@
     <Compile Include="Account.cs" />
     <Compile Include="cacheLoader.cs" />
     <Compile Include="DBContext.cs" />
+    <Compile Include="CMDRunner.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
