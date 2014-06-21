@@ -160,6 +160,7 @@
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="packages.config" />
     <Content Include="NLog.config" />
+    <Content Include="Scripts\common\CryptoJS.AES.js" />
     <Content Include="Scripts\common\knockout.reactor.js" />
     <Content Include="Views\UsersAdmin\List.cshtml" />
     <Content Include="Scripts\bz.userAdmin.js" />
@@ -282,6 +283,10 @@
     <ProjectReference Include="..\DomainModels\DomainModels.csproj">
       <Project>{04f6e70e-1843-440a-88e2-2a708b1f7cbf}</Project>
       <Name>DomainModels</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Utility\Utility.csproj">
+      <Project>{1d81cce8-56f5-47be-b323-93d1d963ae15}</Project>
+      <Name>Utility</Name>
     </ProjectReference>
     <ProjectReference Include="..\ViewModels\ViewModels.csproj">
       <Project>{c643642e-66b9-47ab-9f30-eeb7112188de}</Project>

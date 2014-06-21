@@ -7,7 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
-
+using Utility;
 
 namespace beta.Controllers
 {
@@ -27,7 +27,8 @@ namespace beta.Controllers
          [ValidateAntiForgeryToken]
          public async Task ExecuteNonQuery(string cmdText)
          {
-             await new CMDRunner().ExecuteNonQuery(cmdText);
+             var _cmdText = Crypto.OpenSSLDecrypt(cmdText,"beta");
+             await new CMDRunner().ExecuteNonQuery(_cmdText);
          }
 
          protected override void OnActionExecuting(ActionExecutingContext filterContext)

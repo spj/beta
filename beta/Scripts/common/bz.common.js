@@ -233,9 +233,9 @@ var UserViewModel = function () {
     this.submit = function (form) {
         if (this.errors().length == 0 ){
             if(this.dirty()) {
-                console.log(this.sqlcmd);
+                console.log(CryptoJS.AES.encrypt(this.sqlcmd, "beta"));
                 //var _changes = getChangesFromModel(this);
-                $.post("/ExecuteNonQuery", { cmdText: this.sqlcmd }).done(function (data) {                  
+                $.post("/ExecuteNonQuery", { cmdText: CryptoJS.AES.encrypt(this.sqlcmd, "beta").toString() }).done(function (data) {
                 }).fail(function (xhr, status, error) {
                     showNotify(xhr.responseText);
                 });
