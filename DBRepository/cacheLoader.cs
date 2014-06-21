@@ -25,6 +25,7 @@ namespace beta.DBRepository
                 SqlDataAdapter adapter = new SqlDataAdapter();
                 adapter.SelectCommand = cmd;
                 adapter.TableMappings.Add("Table", "Dealers");
+                adapter.TableMappings.Add("Table1", "Roles");
                 adapter.Fill(ds);
             }
             return ds;
@@ -65,6 +66,8 @@ namespace beta.DBRepository
                return ds;
            }
        }
+
+       //field name must match column name
        public IQueryable<T> GetCachedObject<T>(string objName, string tableName)
        {
            var models = HttpRuntime.Cache.Get(objName) as IQueryable<T>;
@@ -93,6 +96,9 @@ namespace beta.DBRepository
        {
            return GetCachedObject<DealerModel>("CacheDealers", "Dealers");
        }
-
+       public IQueryable<RoleModel> GetRoles()
+       {
+           return GetCachedObject<RoleModel>("CacheRoles", "Roles");
+       }
    }
 }

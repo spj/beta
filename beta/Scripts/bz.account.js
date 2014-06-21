@@ -65,28 +65,4 @@ function forgotPassword() {
     loadView('Account', 'ForgotPassword', new ForgotPasswordViewModel());
 }
 
-var _typeaheadObjects = [];
-var dealerTypeaheadHelper = function () {
-    return {
-        option: {
-            minLength: 4,
-            source: function (query, process) {
-                return $.getJSON(String.format("/Independent/DealersForRegister/{0}", query)).done(function (data) {
-                    _typeaheadObjects = data;
-                    process(getTypeAheadFromJson(data, 'Name'));
-                });
-            }
-            ,
-            updater: function (dealer) {
-                var _d = _(_typeaheadObjects).find(function (d) {
-                    return d.Name == dealer;
-                });
-                var _model = ko.dataFor($('#main form')[0]);
-                _model.dealerObj(_d);
-                return _d.Name;
-            }
-        }
-    };
-};
-
 //# sourceURL=bz.account.js

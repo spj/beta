@@ -52,9 +52,11 @@ namespace beta.DBRepository
                     if (reader.HasRows)
                     {
                         while (reader.Read())
-                        {                            
-                            _userDealers.UserFullName = reader.GetString(0);
-                            _userDealers.Dealers.Add(reader.GetString(1));
+                        {
+                            int _idx = reader.GetOrdinal("FullName");
+                            _userDealers.UserFullName = reader.GetString(_idx);
+                            _idx = reader.GetOrdinal("Dealer");
+                            _userDealers.Dealers.Add(reader.GetString(_idx));
                         }
                     }
                 }
@@ -82,12 +84,60 @@ namespace beta.DBRepository
                     {
                         while (reader.Read())
                         {
-                            _users.Add(new DealerUserModel() { UID = reader.GetString(0), Email=reader.GetString(1), UName = reader.GetString(2) });
+                            var _model = new DealerUserModel();
+                            int _idx = reader.GetOrdinal("id");
+                            _model.UID = reader.GetString(_idx);
+                            _idx = reader.GetOrdinal("email");
+                            _model.Email = reader.GetString(_idx);
+                            _idx = reader.GetOrdinal("fullname");
+                            _model.UName = reader.GetString(_idx);
+                            _idx = reader.GetOrdinal("LockoutEndDateUtc");
+                            if (!reader.IsDBNull(_idx))
+                                _model.LockoutEndDate = reader.GetDateTime(_idx);
+                            _users.Add(_model);
                         }
                     }
                 }
             }
             return _users;
+        }
+
+        //Tuple<roles,dealers>
+        public Tuple<List<string>,List<string>> GetUserDealersAndRoles(string user)
+        {
+            List<string> _roles = new List<string>();
+            List<string> _dealers = new List<string>();
+            SqlParameter sql_user = new SqlParameter("@uid", SqlDbType.VarChar);
+            sql_user.Value = user;
+
+            SqlCommand cmd = new SqlCommand();
+            cmd.CommandText = "getUserDealersAndRoles";
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.Add(sql_user);
+            using (SqlConnection conn = new SqlConnection(DBContext.DefaultConnection))
+            {
+                if (conn.State == ConnectionState.Closed) conn.Open();
+                cmd.Connection = conn;
+                using (SqlDataReader reader = cmd.ExecuteReader())
+                {
+                    if (reader.HasRows)
+                    {
+                        while (reader.Read())
+                        {
+                            _roles.Add(reader.GetString(0));
+                        }
+                        reader.NextResult();
+                        if (reader.HasRows)
+                        {
+                            while (reader.Read())
+                            {
+                                _dealers.Add(reader.GetString(0));
+                            }
+                        }
+                    }
+                }
+            }
+            return Tuple.Create(_roles,_dealers);
         }
     }
 }

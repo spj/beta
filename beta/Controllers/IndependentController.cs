@@ -14,17 +14,18 @@ namespace beta.Controllers
     public class IndependentController : SessionlessController
     {
         [AllowAnonymous]
-        public JsonResult DealersForRegister(string id)
+        [Route("Dealers/{dealer}")]
+        public JsonResult DealersForRegister(string dealer)
         {
             List<DealerRegisterViewModel> _dealers = new List<DealerRegisterViewModel>();
-            foreach (var dealer in CacheData.GetDealers().Where(d => d.Name.ToLower().Contains(id.ToLower())).Select(d => d))
+            foreach (var d in CacheData.GetDealers().Where(d => d.Name.ToLower().Contains(dealer.ToLower())).Select(d => d))
             {
-                _dealers.Add(new DealerRegisterViewModel() { DealerID =dealer.DealerID, Name=dealer.Name });
+                _dealers.Add(new DealerRegisterViewModel() { DealerID =d.DealerID, Name=d.Name });
             }
 
             return Json(_dealers, JsonRequestBehavior.AllowGet);
         }
-        
+
         public JsonResult GetUserDealers(string user)
         {
             UserDealerModel _userDealers = new Account().GetUserDealers(user);
@@ -39,9 +40,8 @@ namespace beta.Controllers
                                Language = d.Language,
                                Settings = d.Settings
                            }).ToList();
-
-
                return Json(new { UserFullName = _userDealers.UserFullName, Dealers = _dealers }, JsonRequestBehavior.AllowGet);
         }
+
     }
 }

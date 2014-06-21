@@ -40,7 +40,6 @@ String.prototype.startsWith = function (prefix) {
     return (this.substr(0, prefix.length) === prefix);
 }
 
-
 function loadTemplate(parent$, url, template, appendTo) {
     return $.Deferred(function (deferred) {
         if (hasNoValue(template) || hasNoValue($('#' + template))) {
@@ -127,7 +126,70 @@ function getAddressInfoByZip(zip) {
     }).promise();
 }
 
+// Written by Luke Morton, licensed under MIT
+(function ($) {
+    $.fn.watchChanges = function () {
+        return this.each(function () {
+            $.data(this, 'formHash', $(this).serialize());
+        });
+    };
+
+    $.fn.hasChanged = function () {
+        var hasChanged = false;
+
+        this.each(function () {
+            var formHash = $.data(this, 'formHash');
+
+            if (formHash != null && formHash !== $(this).serialize()) {
+                hasChanged = true;
+                return false;
+            }
+        });
+
+        return hasChanged;
+    };
+
+}).call(this, jQuery);
+// In this example we detect if a user clicks a link to travel elsewhere but has made changes to a form. If they have changed the form it prompts them to confirm before continuing.
+    //var $form = $('form').watchChanges();
+ 
+    //$('a').click(function (e) {
+    //    if ($form.hasChanged() and ! confirm('Continue without saving changes?')) {
+    //        e.preventDefault();
+    //    }
+    //});
+
+
 //ko
+function setkoArrayValue(obj, values){
+    var _obj = obj();
+    $.each(values, function (i,value) {
+        _obj[i] = value;
+    });
+    obj.valueHasMutated();
+}
+
+function setOriginal(obj, value, isdirty) {//value is supposed to be a simple type
+    if (value instanceof Array) obj.original = ko.mapping.toJSON(value);
+    else
+        if (ko.observable(value)) obj.original = ko.mapping.toJS(value);
+        else obj.original = value;
+    obj.isdirty = function () {
+        if (obj().length != obj.original.length) return true;
+        return isdirty ? isdirty(obj) : obj() != obj.original;
+    };
+    if (obj.original instanceof Array) {
+        setkoArrayValue(obj, value);
+    }
+    else
+        obj(value);
+}
+
+function getOrignal(obj) {
+    if (obj() instanceof Array) return JSON.parse(obj.original);
+    return obj.original;
+}
+
 ko.validation.setError = function(property, err) {
     property.error = "Not found!";
     property.__valid__(false);
@@ -142,7 +204,6 @@ ko.extenders.reset = function (target) {
     target.reset = function () {
         target(initialValue);
     }
-
     return target;
 };
 
@@ -384,3 +445,128 @@ ko.bindingHandlers.typeahead = {
         return target;
     };
 })(jQuery, ko);
+
+
+//change tracking
+var getObjProperties = function (obj, properties) {
+    var objProperties = [];
+    var val = ko.utils.unwrapObservable(obj);
+
+    if (val !== null && typeof val === 'object') {
+        for (var i in val) {
+            if (val.hasOwnProperty(i)) {
+                if (properties && !_(properties).contains(i)) continue;
+                objProperties.push({ "name": i, "value": val[i] });
+            }
+        }
+    }
+
+    return objProperties;
+};
+
+var traverseObservables = function (obj, action) {
+    ko.utils.arrayForEach(getObjProperties(obj), function (observable) {
+        if (observable && observable.value && !observable.value.nodeType && ko.isObservable(observable.value)) {
+            action(observable);
+        }
+    });
+};
+
+ko.extenders.trackChange = function (target, track) {
+    if (track) {
+        target.hasValueChanged = ko.observable(false);
+        target.hasDirtyProperties = ko.observable(false);
+
+        target.isDirty = ko.computed(function () {
+            return target.hasValueChanged() || target.hasDirtyProperties();
+        });
+
+        var unwrapped = target();
+        if ((typeof unwrapped == "object") && (unwrapped !== null)) {
+            traverseObservables(unwrapped, function (obj) {
+                applyChangeTrackingToObservable(obj.value);
+
+                obj.value.isDirty.subscribe(function (isdirty) {
+                    if (isdirty) target.hasDirtyProperties(true);
+                });
+            });
+        }
+
+        target.originalValue = target();
+        target.subscribe(function (newValue) {
+            // use != not !== so numbers will equate naturally
+            target.hasValueChanged(newValue != target.originalValue);
+            target.hasValueChanged.valueHasMutated();
+        });
+
+        if (!target.getChanges) {
+            target.getChanges = function (newObject) {
+                var obj = target();
+                if ((typeof obj == "object") && (obj !== null)) {
+                    if (target.hasValueChanged()) {
+                        return ko.mapping.toJS(obj);
+                    }
+                    return getChangesFromModel(obj);
+                }
+
+                return target();
+            };
+        }
+    }
+
+    return target;
+};
+
+var applyChangeTrackingToObservable = function (observable) {
+    // Only apply to basic writeable observables
+    if (observable && !observable.nodeType && !observable.refresh && ko.isObservable(observable)) {
+        if (!observable.isDirty) observable.extend({ trackChange: true });
+    }
+};
+
+var applyChangeTracking = function (obj, properties) {
+
+     properties = getObjProperties(obj, properties);
+    ko.utils.arrayForEach(properties, function (property) {
+        applyChangeTrackingToObservable(property.value);
+    });
+};
+
+var getChangesFromModel = function (obj) {
+    var changes = null;
+    var properties = getObjProperties(obj);
+
+    ko.utils.arrayForEach(properties, function (property) {
+        if (property.value != null && typeof property.value.isDirty != "undefined" && property.value.isDirty()) {
+            changes = changes || {};
+            changes[property.name] = property.value.getChanges();
+        }
+    });
+
+    return changes;
+};
+
+//var viewModel = {
+//    Name: ko.observable("Pete"),
+//    Age: ko.observable(29),
+//    Skills: ko.observable({
+//        Tdd: ko.observable(true),
+//        Knockout: ko.observable(true),
+//        ChangeTracking: ko.observable(false),
+//        Languages: ko.observable({
+//            Csharp: ko.observable(false),
+//            Javascript: ko.observable(false)
+//        }),
+//    }),
+//    Occupation: ko.observable("Developer")
+//};
+
+//applyChangeTracking(viewModel);
+
+//viewModel.Skills().ChangeTracking(true);
+//viewModel.Skills().Languages({
+//    Csharp: ko.observable(true),
+//    Javascript: ko.observable(true),
+//});
+
+//console.log(getChangesFromModel(viewModel));

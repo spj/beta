@@ -14,13 +14,35 @@ using beta.ViewModels;
 
 namespace beta.Controllers
 {
-    [Authorize(Roles = "UserManagement")]    
+    [Authorize(Roles = "UserAdmin")]    
     public class UsersAdminController : SessionlessController
     {
         [Route("GetDealerUsers/{dealer}")]
         public JsonResult GetDealerUsers(string dealer)
         {
             return Json((new DealerUserViewModel(dealer)).Users, JsonRequestBehavior.AllowGet);
+        }
+
+        [Route("GetUserDealersAndRoles/{user}")]
+        public JsonResult GetUserDealersAndRoles(string user)
+        {
+            var _data = new DealerRoleViewModel(user).DealersAndRoles;
+            var _roles = _data.Item1;
+            var _dealers = _data.Item2;
+           var _dealerExts = (from d in CacheData.GetDealers()
+                           join i in _dealers on d.DealerID equals i
+                           select new 
+                           {
+                               DealerID = d.DealerID,
+                               Name = d.Name,
+                           }).ToList();
+           return Json(new { roles=_roles, dealers=_dealerExts}, JsonRequestBehavior.AllowGet);
+        }
+
+        [Route("GetRoles")]
+        public JsonResult GetRoles()
+        {
+            return Json(CacheData.GetRoles(), JsonRequestBehavior.AllowGet);
         }
 
         #region sample

@@ -10,11 +10,19 @@ namespace beta.ViewModels
 {
     public class DealerUserViewModel:DealerUserModel
     {
-        List<DealerUserModel> _users = null;
-        public List<DealerUserModel> Users { get { return _users; } }
+       public List<DealerUserModel> Users = null;
         public DealerUserViewModel(string dealer)
         {
-           _users = new Account().GetUsers(dealer);
+           Users = new Account().GetUsers(dealer);
+        }
+    }
+
+    public class DealerRoleViewModel
+    {
+        public Tuple<List<string>, List<string>> DealersAndRoles = null;
+        public DealerRoleViewModel(string user)
+        {
+            DealersAndRoles= new Account().GetUserDealersAndRoles(user);
         }
     }
 }

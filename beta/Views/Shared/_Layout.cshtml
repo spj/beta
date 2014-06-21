@@ -37,11 +37,11 @@
                     {
                         <ul class="nav navbar-nav">
                             @if (User.IsInRole("Admin")) {
-                            <li>@Html.ActionLink("RolesAdmin", "Index", "RolesAdmin")</li>
+                            <li>@Html.ActionLink("Roles", "Index", "RolesAdmin")</li>
                             }
                             else { 
                             @*<li>@Html.ActionLink("UsersAdmin", "Index", "UsersAdmin")</li>*@
-                                if (User.IsInRole("UserManagement")) {
+                                if (User.IsInRole("UserAdmin")) {
                                     <li><a href="#" onclick="loadUserAdmin()">Users</a></li>
                                 }
                             }

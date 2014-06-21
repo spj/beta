@@ -21,8 +21,7 @@ namespace beta
             //bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
             //          "~/Scripts/bootstrap.js",
             //          "~/Scripts/respond.js"));
-            bundles.Add(new ScriptBundle("~/bundles/beta").Include(
-                "~/Scripts/utility.js", "~/Scripts/common/*.js"));
+            bundles.Add(new ScriptBundle("~/bundles/beta").Include("~/Scripts/common/*.js"));
             bundles.Add(new ScriptBundle("~/bundles/beta.account").Include(
       "~/Scripts/bz.account.js"));
             bundles.Add(new ScriptBundle("~/bundles/beta.sendVerifyCode").Include(
