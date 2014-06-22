@@ -7,7 +7,7 @@
     this.dealer = koreset();
     this.email = korequire().extend({ email: true });
     this.phoneNumber = korequire().extend({phoneUS:true});
-    this.userName = korequire();
+    this.userName = korequire().extend({ pattern: '^[0-9a-zA-Z\ \]+$' });
     this.clearPassword = korequire().extend({ passwordComplexity: true });
     this.password = null;
     this.confirmPassword = korequire().extend({ 
