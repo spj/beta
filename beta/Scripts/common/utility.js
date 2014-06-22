@@ -177,7 +177,7 @@ function setOriginal(obj, value, isdirty) {//value is supposed to be a simple ty
         if (ko.observable(value)) obj.original = ko.mapping.toJS(value);
         else obj.original = value;
     obj.isdirty = function () {
-        if (obj().length != obj.original.length) return true;
+        if (obj().length != getOrignal(obj).length) return true;
         return isdirty ? isdirty(obj) : obj() != obj.original;
     };
     if (obj.original instanceof Array) {

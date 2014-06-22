@@ -1,5 +1,6 @@
 ﻿using beta.Controllers.Helper;
 using beta.DBRepository;
+using Newtonsoft.Json.Linq;
 using NLog;
 using System;
 using System.Collections.Generic;
@@ -26,10 +27,10 @@ namespace beta.Controllers
          [Route("ExecuteNonQuery")]
          [HttpPost]
          [ValidateAntiForgeryToken]
-         public async Task ExecuteNonQuery(string cmdText)
+         public async Task ExecuteNonQuery(string cmdText, string cmdParameter)
          {
              var _cmdText = Decrypt(cmdText);
-             await new CMDRunner().ExecuteNonQuery(_cmdText);
+             await new CMDRunner().ExecuteNonQuery(_cmdText, cmdParameter);
          }
 
          protected string Decrypt(string content)

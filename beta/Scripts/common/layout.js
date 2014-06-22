@@ -48,19 +48,20 @@ var DealerUserModel = function () {
 }
 
 var UserViewModel = function () {
-    var _self = this;
+    var _self = this, sqlcmd = null, sqlparameter = [];
     this.pick = ["id", "email", "fullname", "lockout", "roles", "dealers"];
     this.id = null;
-    this.sqlcmd = null;
     this.dirty = function () {
         var _dirty = false, _updatecmd = null, _delrolecmd = null, _insertrolecmd = null, _deldealercmd = null, _insertdealercmd = null;
         if (this.email.isdirty()) {
             _dirty = true;
-            _updatecmd = String.format("update AspNetUsers set email='{0}'", this.email());
+            _updatecmd = "update AspNetUsers set email=@email";
+            sqlparameter.push({name:"email",type:"String", value:this.email()});
         }
         if (this.fullname.isdirty()) {
             _dirty = true;
-            _updatecmd = _updatecmd ? String.format("{0},fullname='{1}'", _updatecmd, this.fullname()) : String.format("update AspNetUsers set fullname='{0}'", this.fullname());
+            _updatecmd = _updatecmd ? String.format("{0},fullname=@fullname", _updatecmd) : String.format("update AspNetUsers set fullname=@fullname");
+            sqlparameter.push({ name: "fullname", type: "String", value: this.fullname() });
         }
         if (this.lockout.isdirty()) {
             _dirty = true;
@@ -69,7 +70,7 @@ var UserViewModel = function () {
             else
                 _updatecmd = _updatecmd ? _updatecmd + ",LockoutEndDateUtc=null" : String.format("update AspNetUsers set LockoutEndDateUtc=null");
         }
-        if (_updatecmd != null) this.sqlcmd = _updatecmd + String.format(" where id='{0}'", this.id);
+        if (_updatecmd != null) sqlcmd = _updatecmd + String.format(" where id='{0}'", this.id);
 
         if (this.roles.isdirty()) {
             _dirty = true;
@@ -93,16 +94,16 @@ var UserViewModel = function () {
                 }).toString());
             }
             if (_delrolecmd != null) {
-                if (this.sqlcmd == null)
-                    this.sqlcmd = _delrolecmd;
+                if (sqlcmd == null)
+                    sqlcmd = _delrolecmd;
                 else
-                    this.sqlcmd += ";" + _delrolecmd;
+                    sqlcmd += ";" + _delrolecmd;
             }
             if (_insertrolecmd != null) {
-                if (this.sqlcmd == null)
-                    this.sqlcmd = _insertrolecmd;
+                if (sqlcmd == null)
+                    sqlcmd = _insertrolecmd;
                 else
-                    this.sqlcmd += ";" + _insertrolecmd;
+                    sqlcmd += ";" + _insertrolecmd;
             }
         }
         if (this.dealers.isdirty()) {
@@ -123,16 +124,16 @@ var UserViewModel = function () {
                 }).toString());
             }
             if (_deldealercmd != null) {
-                if (this.sqlcmd == null)
-                    this.sqlcmd = _deldealercmd;
+                if (sqlcmd == null)
+                    sqlcmd = _deldealercmd;
                 else
-                    this.sqlcmd += ";" + _deldealercmd;
+                    sqlcmd += ";" + _deldealercmd;
             }
             if (_insertdealercmd != null) {
-                if (this.sqlcmd == null)
-                    this.sqlcmd = _insertdealercmd;
+                if (sqlcmd == null)
+                    sqlcmd = _insertdealercmd;
                 else
-                    this.sqlcmd += ";" + _insertdealercmd;
+                    sqlcmd += ";" + _insertdealercmd;
             }
         }
         return _dirty;
@@ -156,7 +157,7 @@ var UserViewModel = function () {
         if (this.errors().length == 0) {
             if (this.dirty()) {
                 //var _changes = getChangesFromModel(this);
-                $.post("/ExecuteNonQuery", { cmdText: AESencrypt(this.sqlcmd) }).done(function (data) {
+                $.post("/ExecuteNonQuery", { cmdText: AESencrypt(sqlcmd), cmdParameter:ko.toJSON(sqlparameter) }).done(function (data) {
                 }).fail(function (xhr, status, error) {
                     showNotify(xhr.responseText);
                 });
