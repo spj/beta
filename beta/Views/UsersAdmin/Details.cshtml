@@ -1,15 +1,13 @@
 ﻿<form method="post" data-bind="submit: submit, event: {reset:reset}" class="form-horizontal" role="form">
 @Html.AntiForgeryToken()
     <div class="form-group">
+        <label class="col-md-2 control-label">Email</label>
+        <div class="col-md-10" data-bind="text:email"/>
+    </div>
+    <div class="form-group">
         <label class="col-md-2 control-label">Name</label>
         <div class="col-md-10">
             <input type="text" data-bind="value:fullname" class="form-control"/>
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="col-md-2 control-label">Email</label>
-        <div class="col-md-10">
-            <input type="text" data-bind="value:email" class="form-control" />
         </div>
     </div>
     <div class="form-group">

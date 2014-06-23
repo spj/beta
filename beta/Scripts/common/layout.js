@@ -24,7 +24,7 @@ var DealerUserModel = function () {
         loadView("UsersAdmin", "Details", _userViewModel);
         $.getJSON(String.format("/GetUserDealersAndRoles/{0}", user.UID)).done(function (data) {
             _userViewModel.id = user.UID;
-            setOriginal(_userViewModel.email, user.Email);
+            _userViewModel.email = user.Email;
             setOriginal(_userViewModel.fullname, user.UName);
             setOriginal(_userViewModel.lockout, !hasNoValue(user.LockoutEndDate));
             setOriginal(_userViewModel.dealers, data.dealers, function (obj) {
@@ -49,15 +49,10 @@ var DealerUserModel = function () {
 
 var UserViewModel = function () {
     var _self = this, sqlcmd = null, sqlparameter = [];
-    this.pick = ["id", "email", "fullname", "lockout", "roles", "dealers"];
+    this.pick = ["id", "fullname", "lockout", "roles", "dealers"];
     this.id = null;
     this.dirty = function () {
         var _dirty = false, _updatecmd = null, _delrolecmd = null, _insertrolecmd = null, _deldealercmd = null, _insertdealercmd = null;
-        if (this.email.isdirty()) {
-            _dirty = true;
-            _updatecmd = "update AspNetUsers set email=@email";
-            sqlparameter.push({name:"email",type:"String", value:this.email()});
-        }
         if (this.fullname.isdirty()) {
             _dirty = true;
             _updatecmd = _updatecmd ? String.format("{0},fullname=@fullname", _updatecmd) : String.format("update AspNetUsers set fullname=@fullname");
@@ -138,7 +133,7 @@ var UserViewModel = function () {
         }
         return _dirty;
     };
-    this.email = korequire();
+    this.email = null;
     this.fullname = korequire();
     this.lockout = korequire();
     this.dealerObj = koreset();
