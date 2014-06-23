@@ -25,11 +25,13 @@
         if (this.errors().length == 0) {
             this.password = AESencrypt(this.clearPassword());
             $.post(String.format("/Account/Register"), { data: submitData(this) }).done(function (data) {
-                //$.post(String.format("/Account/SendRegisterEmail"), { uid: data });
-                _self.reset();
-                showNotify('Please check your email!');
-            }).fail(function (xhr, status, error) {
-                showNotify(xhr.responseText);
+                if (data)
+                    showNotify(data);
+                else
+                {
+                    _self.reset();
+                    showNotify('Please check your email!');
+                }                
             });
         } else {
             this.errors.showAllMessages();

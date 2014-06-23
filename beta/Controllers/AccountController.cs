@@ -151,7 +151,7 @@ namespace beta.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Register(string data)
+        public async Task<string> Register(string data)
         {
             RegisterViewModel model = JsonConvert.DeserializeObject<RegisterViewModel>(data);
             model.Password = Crypto.OpenSSLDecrypt(model.Password,"beta");
@@ -174,7 +174,7 @@ namespace beta.Controllers
                 //ViewBag.Link = callbackUrl;
                 //return View("DisplayEmail");
             }
-            return new EmptyResult();
+            return result.Errors.FirstOrDefault();
         }
 
         //
