@@ -8,7 +8,9 @@ function loadUserAdmin() {
     $.getJSON(String.format("/GetDealerUsers/{0}", beta.global.currentuser.dealer().DealerID))).done(function (model, users) {
         model.users(users[0]);
     });
-
+    ko.watch(beta.global.currentuser.dealer, function (parents, child, item) {
+        loadUserAdmin();
+    });
 }
 function loadRegister() {
     var _url = String.format("/{0}/GetView/{1}", 'Account', 'Register');
