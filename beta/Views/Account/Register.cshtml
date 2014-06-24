@@ -1,4 +1,5 @@
-<form method="post" data-bind="submit: submit, event: {reset:reset}" class="form-horizontal" role="form">
+<script type="text/html" id="RegisterViewTmpl">
+<form method="post" data-bind="submit: submit, event: {reset:reset}" class="form-horizontal bindingTarget" role="form">
     @Html.AntiForgeryToken()
     <h4>Create a new account.</h4>
     <hr />
@@ -46,4 +47,5 @@
     </div>
 
 </form>
-
+</script>
+@Scripts.Render("~/bundles/beta.register")

@@ -18,7 +18,10 @@
 }
 
 function forgotPassword() {
-    loadView('Account', 'ForgotPassword', new ForgotPasswordViewModel());
+    var _url = String.format("/{0}/GetView/{1}", 'Account', 'ForgotPassword');
+    var _container = $('#main');
+    var _prefix = "ForgotPasswordView"; _modelName = _prefix + "Model";
+    loadTemplate({ url: _url, $container: _container, element: _prefix, modelName: _modelName });
 }
 
 //# sourceURL=bz.account.js

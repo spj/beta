@@ -40,19 +40,45 @@ String.prototype.startsWith = function (prefix) {
     return (this.substr(0, prefix.length) === prefix);
 }
 
-function loadTemplate(parent$, url, template, appendTo) {
+function loadTemplate(options) {
+    //option={url, template, $container,elementID, modelName}
     return $.Deferred(function (deferred) {
-        if (hasNoValue(template) || hasNoValue($('#' + template))) {
-            $.get(url, function (html) {
-                if (appendTo)
-                    parent$.append(html);
+        if (hasNoValue(options.template) || $('#' + options.template).length == 0) {
+            $.get(options.url).done(function (html) {
+                if (hasNoValue(options.template)) {
+                    if (options.$container) {
+                        options.$container.html($(String.format("<div id='{0}'></div>", options.elementID)).html(html));
+                    }
+                }
+                else {
+                    $('body').append(html);
+                    if (options.$container) {
+                        options.$container.html(String.format("<div id='{0}' data-bind='template:{name:&quot;{1}&quot;}'></div>", options.elementID, options.template));
+                    }
+                }
+                if (options.modelName) {
+                    var model = new window[options.modelName]();
+                    model.errors = ko.validation.group(model).watch(false);
+                    ko.applyBindings(model, $('#'+options.elementID)[0]);
+                    deferred.resolve(model);
+                }
                 else
-                    parent$.html(html);
-                deferred.resolve();
+                    deferred.resolve();
             });
         }
-        else
-            deferred.resolve();
+        else {
+            if (options.$container) {
+                options.$container.html(String.format("<div id='{0}' data-bind='template:{name:&quot;{1}&quot;}'></div>", options.elementID, options.template));
+            }
+            if (options.modelName) {
+                var model = new window[options.modelName]();
+                model.errors = ko.validation.group(model).watch(false);
+                ko.applyBindings(model, $('#'+options.elementID)[0]);
+                deferred.resolve(model);
+            }
+            else
+                deferred.resolve();
+        }
     }).promise();
 }
 

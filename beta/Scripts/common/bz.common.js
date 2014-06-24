@@ -11,27 +11,22 @@ $(window).bind('statechange', function () {
             var _model = new window[_data.modelName]();
             $.extend(_model, _modelData);
         }
-        loadView(_data.controller, _data.view, _model, _data.bindingTarget, true);
+        //loadView(_data.controller, _data.view, _model, _data.bindingTarget, true);
     }
 });
 
-function loadView(controller, view, model, bindingTarget, history) {
+function loadView(controller, view, history) {
     view = view || "index";
     var _container = $('#main');
     var _url = String.format("/{0}/GetView/{1}", controller, view);
-    loadTemplate(_container, _url).done(function () {
-        if (model) {
-            bindingTarget = bindingTarget || '#main form,#main .bindingTarget';
-            model.errors = ko.validation.group(model).watch(false);
-            ko.applyBindings(model, $(bindingTarget)[0]);
-        }
-        if (!history) {
-            var _url = String.format("/{0}/{1}", controller, view);
-            History.pushState({ idx: History.getCurrentIndex(), controller: controller, view: view, modelName: hasNoValue(model)?null:model.modelName, bindingTarget: bindingTarget }, view, _url);
-            if (model) {
-                sessionStorage.setItem(model.modelName, ko.mapping.toJSON(model));
-            }
-        }
+    loadTemplate({ url: _url, $container: _container }).done(function () {
+        //if (!history) {
+        //    var _url = String.format("/{0}/{1}", controller, view);
+        //    History.pushState({ idx: History.getCurrentIndex(), controller: controller, view: view, modelName: hasNoValue(model)?null:modelName, bindingTarget: bindingTarget }, view, _url);
+        //    if (model) {
+        //        sessionStorage.setItem(modelName, ko.mapping.toJSON(model));
+        //    }
+        //}
     });
 }
 

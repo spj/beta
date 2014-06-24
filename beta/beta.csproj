@@ -163,6 +163,8 @@
     <Content Include="Scripts\common\CryptoJS.AES.js" />
     <Content Include="Scripts\common\knockout.reactor.js" />
     <Content Include="Scripts\common\layout.js" />
+    <Content Include="Scripts\bz.register.js" />
+    <Content Include="Scripts\bz.usersAdmin.js" />
     <Content Include="Views\UsersAdmin\List.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
