@@ -19,9 +19,9 @@
 
 function forgotPassword() {
     var _url = String.format("/{0}/GetView/{1}", 'Account', 'ForgotPassword');
-    var _container = $('#main');
+    var _container = '#main';
     var _prefix = "ForgotPasswordView"; _modelName = _prefix + "Model";
-    loadTemplate({ url: _url, $container: _container, element: _prefix, modelName: _modelName });
+    loadTemplate({ url: _url, ontainer: _container, element: _prefix, modelName: _modelName, historyUrl: "/ForgotPassword" });
 }
 
 //# sourceURL=bz.account.js

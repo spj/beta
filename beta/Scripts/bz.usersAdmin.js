@@ -8,15 +8,15 @@ var UsersAdminListViewModel = function () {
 			});
 		}
 		var _url = String.format("/{0}/GetView/{1}", 'UsersAdmin', 'Details');
-		var _container = $('#main');
+		var _container = '#main';
 		var _prefix = "UsersAdminView"; _tmpl = _prefix + "Tmpl"; _modelName = _prefix + "Model";
 		$.when(
-		loadTemplate({ url: _url, template: _tmpl, $container: _container, elementID: _prefix, modelName: _modelName }),
+		loadTemplate({ url: _url, template: _tmpl, container: _container, elementID: _prefix, modelName: _modelName,historyUrl:"/UsersAdmin/Edit" }),
 		$.getJSON(String.format("/GetUserDealersAndRoles/{0}", user.UID))).done(function (model, data) {
 			model.id = user.UID;
 			model.email = user.Email;
-			setOriginal(model.fullname, user.UName);
-			setOriginal(model.lockout, !hasNoValue(user.LockoutEndDate));
+			setOriginal(model.fullname, getValue(user.UName));
+			setOriginal(model.lockout, !hasNoValue(getValue(user.LockoutEndDate)));
 			setOriginal(model.dealers, data[0].dealers, function (obj) {
 				return _.difference(_(getOrignal(obj)).pluck("DealerID"), _(obj()).pluck("DealerID")).length > 0;
 			});
@@ -143,6 +143,7 @@ var UsersAdminViewModel = function () {
 			if (this.dirty()) {
 				//var _changes = getChangesFromModel(this);
 				$.post("/ExecuteNonQuery", { cmdText: AESencrypt(sqlcmd), cmdParameter: ko.toJSON(sqlparameter) }).done(function (data) {
+					History.back();
 				}).fail(function (xhr, status, error) {
 					showNotify(xhr.responseText);
 				});

@@ -5,29 +5,23 @@ $(window).bind('statechange', function () {
     var _currentIdx = History.getCurrentIndex();
     // returns { data: { params: params }, title: "Search": url: "?search" }
     var _data = state.data;
-    if (!hasNoValue(_data.controller) && _currentIdx != _data.idx + 1) {
-        if (_data.modelName) {
-            var _modelData = ko.mapping.fromJSON(sessionStorage.getItem(_data.modelName));
-            var _model = new window[_data.modelName]();
-            $.extend(_model, _modelData);
-        }
-        //loadView(_data.controller, _data.view, _model, _data.bindingTarget, true);
+    if ( _currentIdx != _data.idx + 1) {
+        if (_currentIdx > 0)
+            updateHitoryState(_currentIdx - 1);
+        loadTemplate(_data.options, false);
     }
 });
 
-function loadView(controller, view, history) {
+function getValue(obj) {
+    if (ko.isObservable(obj)) return obj();
+    return obj;
+}
+
+function loadView(controller, view) {
     view = view || "index";
-    var _container = $('#main');
+    var _container = '#main';
     var _url = String.format("/{0}/GetView/{1}", controller, view);
-    loadTemplate({ url: _url, $container: _container }).done(function () {
-        //if (!history) {
-        //    var _url = String.format("/{0}/{1}", controller, view);
-        //    History.pushState({ idx: History.getCurrentIndex(), controller: controller, view: view, modelName: hasNoValue(model)?null:modelName, bindingTarget: bindingTarget }, view, _url);
-        //    if (model) {
-        //        sessionStorage.setItem(modelName, ko.mapping.toJSON(model));
-        //    }
-        //}
-    });
+    loadTemplate({ url: _url, container: _container, historyUrl: String.format("/{0}/{1}", controller, view) });
 }
 
 function koreset(val) {

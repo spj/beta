@@ -1,10 +1,10 @@
 ﻿
 function loadUserAdmin() {
     var _url = String.format("/{0}/GetView/{1}", 'UsersAdmin', 'List');
-    var _container = $('#main');
+    var _container = '#main';
     var _prefix = "UsersAdminListView"; _tmpl = _prefix + "Tmpl"; _modelName = _prefix + "Model";
     $.when(
-    loadTemplate({ url: _url, template: _tmpl, $container: _container, elementID: _prefix, modelName: _modelName }),
+    loadTemplate({ url: _url, template: _tmpl, container: _container, elementID: _prefix, modelName: _modelName, historyUrl:"UsersAdmin/List" }),
     $.getJSON(String.format("/GetDealerUsers/{0}", beta.global.currentuser.dealer().DealerID))).done(function (model, users) {
         model.users(users[0]);
     });
@@ -14,9 +14,9 @@ function loadUserAdmin() {
 }
 function loadRegister() {
     var _url = String.format("/{0}/GetView/{1}", 'Account', 'Register');
-    var _container = $('#main');
+    var _container = '#main';
     var _prefix = "RegisterView"; _tmpl = _prefix + "Tmpl"; _modelName = _prefix + "Model";
-    loadTemplate({ url: _url, template: _tmpl, $container: _container, element: _prefix, modelName: _modelName });
+    loadTemplate({ url: _url, template: _tmpl, container: _container, element: _prefix, modelName: _modelName,historyUrl:"Register" });
 }
 
 function getUserDealers(user) {

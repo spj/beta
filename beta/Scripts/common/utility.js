@@ -40,44 +40,60 @@ String.prototype.startsWith = function (prefix) {
     return (this.substr(0, prefix.length) === prefix);
 }
 
-function loadTemplate(options) {
-    //option={url, template, $container,elementID, modelName}
+function bindingAndHistoryTemplate(options, isnew) {
+    var model = null;
+    if (options.modelName) {
+        model = new window[options.modelName]();
+        model.errors = ko.validation.group(model).watch(false);
+        if (sessionStorage.getItem(options.modelName)){
+            var _modelData = ko.mapping.fromJSON(sessionStorage.getItem(options.modelName));
+            $.extend(model, _modelData);
+        }
+        ko.applyBindings(model, $('#' + options.elementID)[0]);
+    }
+    if (isnew) {
+        History.pushState({ idx: History.getCurrentIndex(), options: options }, null, options.historyUrl);
+        if (options.modelName) {
+            sessionStorage.setItem(options.modelName, ko.mapping.toJSON(model));
+        }
+    }
+    return model;
+}
+
+function updateHitoryState(idx) {
+    idx = idx || History.getCurrentIndex();
+    var state = History.getStateByIndex(idx);
+    var data = state.data;
+    if (hasNoValue(data) || data && hasNoValue(data.options.modelName) || $('#' + data.options.elementID).length==0) return;
+    var model = ko.dataFor($('#' + data.options.elementID)[0]);
+    sessionStorage.setItem(data.options.modelName, ko.mapping.toJSON(model));
+}
+function loadTemplate(options, isnew) {
+    //option={url, template, container,elementID, modelName, historyUrl}
     return $.Deferred(function (deferred) {
+        if(_.isUndefined(isnew)) isnew = true;
+        updateHitoryState();
         if (hasNoValue(options.template) || $('#' + options.template).length == 0) {
             $.get(options.url).done(function (html) {
                 if (hasNoValue(options.template)) {
-                    if (options.$container) {
-                        options.$container.html($(String.format("<div id='{0}'></div>", options.elementID)).html(html));
+                    if (options.container) {
+                        $(options.container).html($(String.format("<div id='{0}'></div>", options.elementID)).html(html));
                     }
                 }
                 else {
                     $('body').append(html);
-                    if (options.$container) {
-                        options.$container.html(String.format("<div id='{0}' data-bind='template:{name:&quot;{1}&quot;}'></div>", options.elementID, options.template));
+                    if (options.container) {
+                        $(options.container).html(String.format("<div id='{0}' data-bind='template:{name:&quot;{1}&quot;}'></div>", options.elementID, options.template));
                     }
                 }
-                if (options.modelName) {
-                    var model = new window[options.modelName]();
-                    model.errors = ko.validation.group(model).watch(false);
-                    ko.applyBindings(model, $('#'+options.elementID)[0]);
-                    deferred.resolve(model);
-                }
-                else
-                    deferred.resolve();
+                deferred.resolve(bindingAndHistoryTemplate(options, isnew));
             });
         }
         else {
-            if (options.$container) {
-                options.$container.html(String.format("<div id='{0}' data-bind='template:{name:&quot;{1}&quot;}'></div>", options.elementID, options.template));
+            if (options.container) {
+                $(options.container).html(String.format("<div id='{0}' data-bind='template:{name:&quot;{1}&quot;}'></div>", options.elementID, options.template));
             }
-            if (options.modelName) {
-                var model = new window[options.modelName]();
-                model.errors = ko.validation.group(model).watch(false);
-                ko.applyBindings(model, $('#'+options.elementID)[0]);
-                deferred.resolve(model);
-            }
-            else
-                deferred.resolve();
+            deferred.resolve(bindingAndHistoryTemplate(options, isnew));
         }
     }).promise();
 }
