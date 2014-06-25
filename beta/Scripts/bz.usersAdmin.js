@@ -143,7 +143,13 @@ var UsersAdminViewModel = function () {
 			if (this.dirty()) {
 				//var _changes = getChangesFromModel(this);
 				$.post("/ExecuteNonQuery", { cmdText: AESencrypt(sqlcmd), cmdParameter: ko.toJSON(sqlparameter) }).done(function (data) {
-					History.back();
+				    var _model = ko.mapping.fromJSON(sessionStorage.getItem("UsersAdminListViewModel"));
+				    var _user = _(_model.users()).find(function (u) {
+				        return u.UID() == _self.id;
+				    });
+				    _user.UName(_self.fullname());
+				    sessionStorage.setItem("UsersAdminListViewModel", ko.toJSON(_model));
+				    History.back();
 				}).fail(function (xhr, status, error) {
 					showNotify(xhr.responseText);
 				});
