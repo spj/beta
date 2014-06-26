@@ -12,6 +12,8 @@ using System.Web.Mvc;
 using beta.DBRepository;
 using Newtonsoft.Json;
 using Utility;
+using System.ComponentModel.DataAnnotations;
+using System.Collections.Generic;
 
 namespace beta.Controllers
 {
@@ -155,6 +157,14 @@ namespace beta.Controllers
         {
             RegisterViewModel model = JsonConvert.DeserializeObject<RegisterViewModel>(data);
             model.Password = Crypto.OpenSSLDecrypt(model.Password,"beta");
+            ICollection<ValidationResult> results;
+            if (!isValid(model, out results))
+            {
+                //foreach (var validationResult in results)
+                //{
+                    return results.FirstOrDefault().ErrorMessage;
+                //}
+            }
             var user = new ApplicationUser { FullName=model.UserName, UserName = model.Email, Email = model.Email, LockoutEnabled = true, TwoFactorEnabled = true, PhoneNumber=model.PhoneNumber };
             var result = await UserManager.CreateAsync(user, model.Password);
             if (result.Succeeded)
