@@ -6,7 +6,7 @@
     this.dealer = koreset();
     this.email = korequire().extend({ email: true });
     this.phoneNumber = korequire().extend({ phoneUS: true });
-    this.userName = korequire().extend({ pattern: '^[0-9a-zA-Z\ \]+$' });
+    this.userName = korequire().extend({required:true, pattern: '^[0-9a-zA-Z\ \]+$' });
     this.clearPassword = korequire().extend({ passwordComplexity: true });
     this.password = null;
     this.confirmPassword = korequire().extend({
@@ -21,9 +21,10 @@
             ko.validation.clearError(_self.dealerName);
     };
     this.submit = function (form) {
-        if (this.errors().length == 0) {
+        this.errors = ko.validation.group(this);
+        if (this.isValid()) {
             this.password = AESencrypt(this.clearPassword());
-            $.post(String.format("/Account/Register"), { data: submitData(this) }).done(function (data) {
+            $.post(String.format("{0}Account/Register", beta.global.webroot), { data: submitData(this) }).done(function (data) {
                 if (data)
                     showNotify(data);
                 else {
@@ -31,9 +32,7 @@
                     _self.reset();                   
                 }
             });
-        } else {
-            this.errors.showAllMessages();
-        }
+        } 
     };
     this.reset = function (data, event) {
         resetViewModel(this, event);

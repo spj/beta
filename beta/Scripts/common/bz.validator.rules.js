@@ -11,5 +11,6 @@ ko.validation.configure({
     errorsAsTitleOnModified: true,
     insertMessages: false,
     parseInputAttributes: true,
-    decorateElement: true
+    decorateElement: true,
+    writeInputAttributes:true
 });

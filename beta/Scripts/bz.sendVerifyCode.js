@@ -1,5 +1,5 @@
 ﻿function SendVerifyCode() {
-    $.post('/Account/SendCode', {}).done(function () {
+    $.post(String.format('{0}Account/SendCode', beta.global.webroot), {}).done(function () {
         showNotify('Please check your email!');
     });
 }

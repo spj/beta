@@ -18,6 +18,35 @@ $.ajaxPrefilter(function (options, originalOptions, jqXHR) {
     }
 });
 
+$(window).bind('statechange', function () {
+    var state = History.getState();
+    var _currentIdx = History.getCurrentIndex();
+    // returns { data: { params: params }, title: "Search": url: "?search" }
+    var _data = state.data;
+    if (_currentIdx != _data.idx + 1) {
+        if (_currentIdx > 0)
+            updateHitoryState(_currentIdx - 1);
+        loadTemplate(_data.options, false);
+    }
+});
+
+function koreset(val) {
+    return val ? ko.observable(val).extend({ reset: true }) : ko.observable().extend({ reset: true });
+}
+function korequire(val) {
+    return val ? ko.observable(val).extend({ reset: true, required: true }) : ko.observable().extend({ reset: true, required: true });
+}
+function koresetArray(val) {
+    return val ? ko.observableArray(val).extend({ reset: true }) : ko.observableArray().extend({ reset: true });
+}
+function korequireArray(val) {
+    return val ? ko.observableArray(val).extend({ reset: true, required: true }) : ko.observableArray().extend({ reset: true, required: true });
+}
+
+function getValue(obj) {
+    if (ko.isObservable(obj)) return obj();
+    return obj;
+}
 function hasNoValue(object) {
     return _.isNaN(object) || _.isNull(object) || _.isUndefined(object) || _.isEmpty(object);
 }
@@ -40,6 +69,26 @@ String.prototype.startsWith = function (prefix) {
     return (this.substr(0, prefix.length) === prefix);
 }
 
+function submitData(model) {
+    var _obj = model;
+    if (model.omit) {
+        _obj = _(model).omit(_.union(model.omit, ["omit", "errors"]));
+    }
+    else
+        if (model.pick)
+            _obj = _(model).pick(model.pick);
+
+    return ko.toJSON(_obj);
+}
+
+function getTypeAheadFromJson(data, property) {
+    if (property)
+        return $.map(data, function (n, i) {
+            return n[property];
+        });
+    else
+        return data;
+}
 function bindingAndHistoryTemplate(options, isnew) {
     var model = null;
     if (options.modelName) {

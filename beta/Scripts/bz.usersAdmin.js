@@ -3,16 +3,16 @@ var UsersAdminListViewModel = function () {
 	this.users = ko.observableArray();
 	this.edit = function (user) {
 		if (hasNoValue(beta.global.roles)) {
-			$.getJSON("/GetRoles").done(function (data) {
+		    $.getJSON(String.format("{0}GetRoles",beta.global.webroot)).done(function (data) {
 				beta.global.roles = data;
 			});
 		}
-		var _url = String.format("/{0}/GetView/{1}", 'UsersAdmin', 'Details');
+		var _url = String.format("{0}{1}/GetView/{2}",beta.global.webroot, 'UsersAdmin', 'Details');
 		var _container = '#main';
 		var _prefix = "UsersAdminView"; _tmpl = _prefix + "Tmpl"; _modelName = _prefix + "Model";
 		$.when(
-		loadTemplate({ url: _url, template: _tmpl, container: _container, elementID: _prefix, modelName: _modelName,historyUrl:"/UsersAdmin/Edit" }),
-		$.getJSON(String.format("/GetUserDealersAndRoles/{0}", user.UID))).done(function (model, data) {
+		loadTemplate({ url: _url, template: _tmpl, container: _container, elementID: _prefix, modelName: _modelName, historyUrl: String.format("{0}UsersAdmin/Edit", beta.global.webroot) }),
+		$.getJSON(String.format("{0}GetUserDealersAndRoles/{1}", beta.global.webroot,user.UID))).done(function (model, data) {
 			model.id = user.UID;
 			model.email = user.Email;
 			setOriginal(model.fullname, getValue(user.UName));
@@ -139,10 +139,11 @@ var UsersAdminViewModel = function () {
 	};
 	this.roles = korequireArray();
 	this.submit = function (form) {
-		if (this.errors().length == 0) {
+	    this.errors = ko.validation.group(this);
+		if (this.isValid()) {
 			if (this.dirty()) {
 				//var _changes = getChangesFromModel(this);
-				$.post("/ExecuteNonQuery", { cmdText: AESencrypt(sqlcmd), cmdParameter: ko.toJSON(sqlparameter) }).done(function (data) {
+			    $.post(String.format("{0}ExecuteNonQuery", beta.global.webroot), { cmdText: AESencrypt(sqlcmd), cmdParameter: ko.toJSON(sqlparameter) }).done(function (data) {
 				    var _model = ko.mapping.fromJSON(sessionStorage.getItem("UsersAdminListViewModel"));
 				    var _user = _(_model.users()).find(function (u) {
 				        return u.UID() == _self.id;
@@ -154,9 +155,7 @@ var UsersAdminViewModel = function () {
 					showNotify(xhr.responseText);
 				});
 			}
-		} else {
-			this.errors.showAllMessages();
-		}
+		} 
 	};
 	this.reset = function (data, event) {
 		resetViewModel(this, event);

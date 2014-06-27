@@ -14,7 +14,7 @@
     <RootNamespace>beta</RootNamespace>
     <AssemblyName>beta</AssemblyName>
     <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
-    <UseIISExpress>true</UseIISExpress>
+    <UseIISExpress>false</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
@@ -166,6 +166,7 @@
     <Content Include="Scripts\bz.register.js" />
     <Content Include="Scripts\bz.usersAdmin.js" />
     <Content Include="Views\UsersAdmin\List.cshtml" />
+    <None Include="Properties\PublishProfiles\beta.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -314,7 +315,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>61418</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:58234/</IISUrl>
+          <IISUrl>http://localhost/beta</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>
