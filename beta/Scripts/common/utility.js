@@ -23,12 +23,17 @@ $(window).bind('statechange', function () {
     var _currentIdx = History.getCurrentIndex();
     // returns { data: { params: params }, title: "Search": url: "?search" }
     var _data = state.data;
-    if (_currentIdx != _data.idx + 1) {
+    if (_data && _data.hasOwnProperty("idx") && _currentIdx != _data.idx + 1) {
         if (_currentIdx > 0)
             updateHitoryState(_currentIdx - 1);
         loadTemplate(_data.options, false);
     }
 });
+
+//refresh(F5)
+//if (History.getCurrentIndex() == 0) {
+//    History.Adapter.trigger(window, 'statechange');
+//}
 
 function koreset(val) {
     return val ? ko.observable(val).extend({ reset: true }) : ko.observable().extend({ reset: true });
