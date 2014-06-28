@@ -11,7 +11,7 @@ var UsersAdminListViewModel = function () {
 		var _container = '#main';
 		var _prefix = "UsersAdminView"; _tmpl = _prefix + "Tmpl"; _modelName = _prefix + "Model";
 		$.when(
-		loadTemplate({ url: _url, template: _tmpl, container: _container, elementID: _prefix, modelName: _modelName, historyUrl: String.format("{0}UsersAdmin/Edit", beta.global.webroot) }),
+		loadTemplate({ url: _url, template: _tmpl, container: _container, elementID: _prefix, modelName: _modelName, historyUrl: String.format("{0}UsersAdmin/Detail", beta.global.webroot) }),
 		$.getJSON(String.format("{0}GetUserDealersAndRoles/{1}", beta.global.webroot,user.UID))).done(function (model, data) {
 			model.id = user.UID;
 			model.email = user.Email;
