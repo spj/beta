@@ -30,7 +30,7 @@ var UsersAdminListViewModel = function () {
 				$.each(obj(), function () {
 					if (this.selected()) _final.push(this.id);
 				});
-				return _.difference(_original, _final).length > 0;
+				return _original.length != _final.length || _.difference(_original, _final).length > 0;
 			});
 			//applyChangeTracking(_userViewModel, _userViewModel.pick);
 		});

@@ -276,7 +276,7 @@ function setOriginal(obj, value, isdirty) {//value is supposed to be a simple ty
         if (obj().length != getOrignal(obj).length) return true;
         return isdirty ? isdirty(obj) : obj() != obj.original;
     };
-    if (obj.original instanceof Array) {
+    if (value instanceof Array) {
         setkoArrayValue(obj, value);
     }
     else
