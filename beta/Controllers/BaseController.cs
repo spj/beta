@@ -1,5 +1,5 @@
 ﻿using beta.Controllers.Helper;
-using beta.DBRepository;
+using beta.DomainModels;
 using Newtonsoft.Json.Linq;
 using NLog;
 using System;
@@ -31,7 +31,7 @@ namespace beta.Controllers
          public async Task ExecuteNonQuery(string cmdText, string cmdParameter)
          {
              var _cmdText = Decrypt(cmdText);
-             await new CMDRunner().ExecuteNonQuery(_cmdText, cmdParameter);
+             await Utilities.CMDRunner.ExecuteNonQuery(Parameters.DefaultConnection, _cmdText, cmdParameter);
          }
 
          protected string Decrypt(string content)

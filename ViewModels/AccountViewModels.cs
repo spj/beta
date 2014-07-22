@@ -1,5 +1,4 @@
-﻿using beta.DBRepository;
-using beta.DomainModels;
+﻿using beta.DomainModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,16 +12,8 @@ namespace beta.ViewModels
        public List<DealerUserModel> Users = null;
         public DealerUserViewModel(string dealer)
         {
-           Users = new Account().GetUsers(dealer);
+            Users = new DealerUsers(dealer).Users;
         }
     }
 
-    public class DealerRoleViewModel
-    {
-        public Tuple<List<string>, List<string>> DealersAndRoles = null;
-        public DealerRoleViewModel(string user)
-        {
-            DealersAndRoles= new Account().GetUserDealersAndRoles(user);
-        }
-    }
 }

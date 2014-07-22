@@ -9,11 +9,11 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
-using beta.DBRepository;
 using Newtonsoft.Json;
 using Utility;
 using System.ComponentModel.DataAnnotations;
 using System.Collections.Generic;
+using beta.DomainModels;
 
 namespace beta.Controllers
 {
@@ -169,7 +169,7 @@ namespace beta.Controllers
             var result = await UserManager.CreateAsync(user, model.Password);
             if (result.Succeeded)
             {
-                new Account().RegisterUserDealer(user.Id, model.Dealer);
+                new Account().Register(user.Id, model.Dealer);
                 var code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
                 //// await Task.WhenAll(code, token);
                 var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);

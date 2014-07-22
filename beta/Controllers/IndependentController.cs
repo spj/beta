@@ -6,7 +6,6 @@ using System.Web;
 using System.Web.Mvc;
 using beta.Models;
 using System.Threading.Tasks;
-using beta.DBRepository;
 using beta.DomainModels;
 
 namespace beta.Controllers
@@ -28,7 +27,7 @@ namespace beta.Controllers
 
         public JsonResult GetUserDealers(string user)
         {
-            UserDealerModel _userDealers = new Account().GetUserDealers(user);
+            UserDealerModel _userDealers = new UserDealerModel(user);
             List<DealerViewModel> _dealers = new List<DealerViewModel>();
                _dealers = (from d in CacheData.GetDealers()
                            join i in _userDealers.Dealers on d.DealerID equals i

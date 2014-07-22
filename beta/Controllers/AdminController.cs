@@ -4,7 +4,6 @@ using System.Data;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using beta.DBRepository;
 
 namespace beta.Controllers
 {

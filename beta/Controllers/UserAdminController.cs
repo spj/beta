@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using beta.ViewModels;
+using beta.DomainModels;
 
 namespace beta.Controllers
 {
@@ -26,9 +27,9 @@ namespace beta.Controllers
         [Route("GetUserDealersAndRoles/{user}")]
         public JsonResult GetUserDealersAndRoles(string user)
         {
-            var _data = new DealerRoleViewModel(user).DealersAndRoles;
-            var _roles = _data.Item1;
-            var _dealers = _data.Item2;
+            var _data = new UserDealersAndRoles(user);
+            var _roles = _data.Roles;
+            var _dealers = _data.Dealers;
            var _dealerExts = (from d in CacheData.GetDealers()
                            join i in _dealers on d.DealerID equals i
                            select new 
