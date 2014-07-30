@@ -1,13 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Express 2013 for Web
+# Visual Studio 2013
 VisualStudioVersion = 12.0.30501.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "beta", "beta\beta.csproj", "{15004B72-0DC8-4A93-B3E8-8413B85D926C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ViewModels", "ViewModels\ViewModels.csproj", "{C643642E-66B9-47AB-9F30-EEB7112188DE}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DBRepository", "DBRepository\DBRepository.csproj", "{C0A623DA-CA30-42CC-B3E9-57FEB4663070}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility", "Utility\Utility.csproj", "{1D81CCE8-56F5-47BE-B323-93D1D963AE15}"
 EndProject
@@ -27,10 +25,6 @@ Global
 		{C643642E-66B9-47AB-9F30-EEB7112188DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C643642E-66B9-47AB-9F30-EEB7112188DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C643642E-66B9-47AB-9F30-EEB7112188DE}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C0A623DA-CA30-42CC-B3E9-57FEB4663070}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C0A623DA-CA30-42CC-B3E9-57FEB4663070}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C0A623DA-CA30-42CC-B3E9-57FEB4663070}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C0A623DA-CA30-42CC-B3E9-57FEB4663070}.Release|Any CPU.Build.0 = Release|Any CPU
 		{1D81CCE8-56F5-47BE-B323-93D1D963AE15}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{1D81CCE8-56F5-47BE-B323-93D1D963AE15}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1D81CCE8-56F5-47BE-B323-93D1D963AE15}.Release|Any CPU.ActiveCfg = Release|Any CPU
