@@ -153,6 +153,7 @@ namespace beta.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
+        [ValidateInput(false)]
         public async Task<string> Register(string data)
         {
             RegisterViewModel model = JsonConvert.DeserializeObject<RegisterViewModel>(data);
