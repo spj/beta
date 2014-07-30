@@ -1,51 +1,50 @@
-<script type="text/html" id="RegisterViewTmpl">
-<form method="post" data-bind="submit: submit, event: {reset:reset}" class="form-horizontal bindingTarget" role="form">
+
+<form name="registerForm" method="post" ng-submit="submit()" class="form-horizontal" role="form" novalidate>
     @Html.AntiForgeryToken()
     <h4>Create a new account.</h4>
     <hr />
     <div class="form-group">
-        <label class="col-md-2 control-label">Dealer</label>       
+        <label class="col-md-2 control-label">Dealer</label>
         <div class="col-md-10">
-            <input type="text" data-bind="value:dealerName, typeahead: dealerTypeaheadHelper, event:{change:dealerNameValidator}" class="form-control" autocomplete="off" autofocus/>
+            <input name="dealer" type="text" ng-model="data.dealer" typeahead="dealer.DealerID as dealer.Name for dealer in getDealers($viewValue)" typeahead-min-length="3" typeahead-editable="false" class="form-control" autocomplete="off" autofocus required />
         </div>
     </div>
     <div class="form-group">
         <label class="col-md-2 control-label">User Name</label>
         <div class="col-md-10">
-            <input type="text" data-bind="value:userName" class="form-control" />
+            <input name="userName" type="text" ng-model="data.userName" class="form-control" required/>
         </div>
     </div>
     <div class="form-group">
         <label class="col-md-2 control-label">Email</label>
         <div class="col-md-10">
-            <input type="email" data-bind="value:email" class="form-control" />
+            <input name="email" type="email" ng-model="data.email" class="form-control" required validation-check="invalid email"/>
         </div>
     </div>
     <div class="form-group">
         <label class="col-md-2 control-label">Phone</label>
         <div class="col-md-10">
-            <input type="tel" data-bind="value:phoneNumber" class="form-control" />
+            <input name="phone" type="tel" ng-model="data.phoneNumber" class="form-control" required ng-minlength="10" validation-check="invalid phone#" validation-checker="phoneChecker" />
         </div>
     </div>
     <div class="form-group">
         <label class="col-md-2 control-label">Password</label>
         <div class="col-md-10">
-            <input type="password" data-bind="value:clearPassword" class="form-control" />
+            <input name="pwd" type="password" ng-model="data.clearPassword" class="form-control" required ng-minlength="5" validation-check />
         </div>
     </div>
     <div class="form-group">
         <label class="col-md-2 control-label">Confirm Password</label>
         <div class="col-md-10">
-            <input type="password" data-bind="value:confirmPassword" class="form-control" />
+            <input name="pwd2" type="password" ng-model="data.confirmPassword" class="form-control" required validation-expression="data.confirmPassword == data.clearPassword" validation-check="not match the password" />
         </div>
     </div>
     <div class="form-group">
         <div class="col-md-offset-2 col-md-10">
-            <input type="submit" class="btn btn-default" value="Register" />
-            <input type="reset" class="btn btn-default" value="Reset" />
+            <input type="submit" class="btn btn-default" value="Register" ng-disabled="registerForm.$invalid" />
+            <input type="reset" class="btn btn-default" value="Reset" ng-click="reset()" />
         </div>
     </div>
 
 </form>
-</script>
 @Scripts.Render("~/bundles/beta.register")

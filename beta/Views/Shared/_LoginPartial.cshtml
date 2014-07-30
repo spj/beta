@@ -3,8 +3,9 @@
     using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" })) {
         @Html.AntiForgeryToken()
 
-        <ul id="currentuser" class="nav navbar-nav navbar-right">
-            @if (!User.IsInRole("Admin")) { 
+    <ul class="nav navbar-nav navbar-right">
+        @if (!User.IsInRole("Admin"))
+        {
             <li>
                 <a href="#" class="btn dropdown-toggle" data-toggle="dropdown">
                     <span data-bind="text:dealer().Name"></span>
@@ -19,12 +20,13 @@
                 @*<a href="#">Hello @User.Identity.GetUserName()!</a>*@
                 <a data-bind="text:fullname"></a>
             </li>
-            }
-            <li><a href="javascript:sessionStorage.clear();document.getElementById('logoutForm').submit()">Log off</a></li>
-        </ul>
+        }
+        <li><a href="javascript:sessionStorage.clear();document.getElementById('logoutForm').submit()">Log off</a></li>
+    </ul>
     }
 }
-else {
+else
+{
     <ul id="login" class="nav navbar-nav navbar-right">
         @*<li>@Html.ActionLink("Log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>*@
         <li><a href="#" onclick="loadRegister()">Register</a></li>
