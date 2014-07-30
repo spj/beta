@@ -156,34 +156,37 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\bootstrap-notify.css" />
-    <Content Include="Content\bootstrap-switch.css" />
-    <Content Include="Content\bootstrap-switch.min.css" />
-    <Content Include="Content\bootstrap-theme.css" />
-    <Content Include="Content\bootstrap-theme.min.css" />
-    <Content Include="Content\bootstrap.css" />
-    <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\css\bootstrap.css" />
+    <Content Include="Content\css\ng-grid.css" />
+    <Content Include="Content\css\Site.css" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="packages.config" />
     <Content Include="NLog.config" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Scripts\bz.register.js" />
+    <Content Include="Scripts\common\angular-ui-router.js" />
     <Content Include="Scripts\common\CryptoJS.AES.js" />
     <Content Include="Scripts\common\knockout.reactor.js" />
     <Content Include="Scripts\common\layout.js" />
-    <Content Include="Scripts\bz.register.js" />
     <Content Include="Scripts\bz.usersAdmin.js" />
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
-    <Content Include="Content\bootstrap-theme.css.map" />
-    <Content Include="Content\bootstrap.css.map" />
+    <Content Include="Content\css\bootstrap.css.map" />
     <None Include="Scripts\jquery-2.1.1.intellisense.js" />
+    <Content Include="Scripts\common\bz.Directives.js" />
+    <Content Include="Scripts\common\ng-grid-2.0.11.js" />
+    <Content Include="Scripts\common\ui-bootstrap-tpls-0.11.0.js" />
+    <Content Include="Scripts\common\ui-utils.js" />
+    <Content Include="Scripts\common\utility.js" />
     <Content Include="Scripts\jquery-2.1.1.js" />
     <Content Include="Scripts\jquery-2.1.1.min.js" />
     <Content Include="Views\UsersAdmin\List.cshtml" />
     <None Include="Properties\PublishProfiles\beta.pubxml" />
     <Content Include="Scripts\jquery-2.1.1.min.map" />
+    <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Home\Test.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -192,7 +195,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\Site.css" />
     <Content Include="Global.asax" />
     <Content Include="Scripts\bootstrap-switch.js" />
     <Content Include="Scripts\bootstrap-switch.min.js" />
@@ -204,9 +206,6 @@
     <Content Include="Scripts\common\bootstrap3-typeahead.js" />
     <Content Include="Scripts\common\bz.common.js" />
     <Content Include="Scripts\common\bz.validator.rules.js" />
-    <Content Include="Scripts\common\history.adapter.jquery.js" />
-    <Content Include="Scripts\common\history.js" />
-    <Content Include="Scripts\common\utility.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
@@ -240,7 +239,6 @@
     <Content Include="Views\Manage\AddPhoneNumber.cshtml" />
     <Content Include="Views\Home\Home.cshtml" />
     <Content Include="Views\Home\Contact.cshtml" />
-    <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Account\VerifyCode.cshtml" />
     <Content Include="Views\Account\SendCode.cshtml" />
     <Content Include="Views\Account\ResetPasswordConfirmation.cshtml" />
@@ -299,6 +297,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Content\img\" />
     <Folder Include="Views\Admin\" />
     <Folder Include="Views\Base\" />
   </ItemGroup>
