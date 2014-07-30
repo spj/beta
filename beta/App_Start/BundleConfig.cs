@@ -31,7 +31,7 @@ namespace beta
             bundles.Add(new ScriptBundle("~/bundles/beta.sendVerifyCode").Include(
       "~/Scripts/bz.sendVerifyCode.js"));
             bundles.Add(new StyleBundle("~/Content/css").Include(
-                "~/Content/bootstrap-notify.css", "~/Content/site.css"));
+                "~/Content/css/site.css"));
       
         }
     }
