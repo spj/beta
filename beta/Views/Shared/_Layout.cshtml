@@ -38,8 +38,8 @@
                 {
                     <ul class="nav navbar-nav">
                         @if (User.IsInRole("Admin"))
-                        {
-                            <li>@Html.ActionLink("Roles", "Index", "RolesAdmin")</li>
+                        {                            
+                            <li><a ui-sref="roles">Roles</a></li>
                         }
                         else
                         {
@@ -54,26 +54,28 @@
                     {
                         @Html.AntiForgeryToken()
 
-                        <ul class="nav navbar-nav navbar-right">
-                            @if (!User.IsInRole("Admin"))
-                            {
-                                <li>
-                                    <a href="#" class="btn dropdown-toggle" data-toggle="dropdown">
-                                        <span data-bind="text:dealer().Name"></span>
-                                        <span class="caret"></span>
-                                    </a>
-                                    <ul class="dropdown-menu" role="menu" data-bind="foreach:dealers">
-                                        <li role="presentation"><a role="menuitem" tabindex="-1" href="#" data-bind="text:Name, click:$parent.change"></a></li>
-                                    </ul>
-                                </li>
-                                <li>
-                                    @*@Html.ActionLink("Hello " + User.Identity.GetUserName() + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })*@
-                                    @*<a href="#">Hello @User.Identity.GetUserName()!</a>*@
-                                    <a data-bind="text:fullname"></a>
-                                </li>
-                            }
-                            <li><a href="javascript:sessionStorage.clear();document.getElementById('logoutForm').submit()">Log off</a></li>
-                        </ul>
+                        <ul class="nav navbar-nav navbar-right" ng-controller="accountCtrl">
+                        @if (!User.IsInRole("Admin"))
+                        {
+                            <li>
+                                <a href="#" class="btn dropdown-toggle" data-toggle="dropdown">
+                                    <span>{{data.dealer.Name}}</span>
+                                    <span class="caret"></span>
+                                </a>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li role="presentation" ng-repeat="dealer in data.dealers">
+                                        <a role="menuitem" tabindex="-1" href="#" ng-click="change(dealer)">{{dealer.Name}}</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                @*@Html.ActionLink("Hello " + User.Identity.GetUserName() + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })*@
+                                @*<a href="#">Hello @User.Identity.GetUserName()!</a>*@
+                                <a>{{ data.fullname}}</a>
+                            </li>
+                        }
+                        <li><a href="javascript:sessionStorage.clear();document.getElementById('logoutForm').submit()">Log off</a></li>
+                    </ul>
                     }
                 }
                 else
@@ -104,7 +106,11 @@
     <script>
         var beta = { global: {} }
         beta.global.webroot = '@Url.Content("~")';
-        beta.global.isAuthenticated = '@Request.IsAuthenticated' == 'true'
+        beta.global.isAuthenticated = '@Request.IsAuthenticated' == 'True'
+        if (beta.global.isAuthenticated)
+            beta.global.currentuser = { email: '@User.Identity.GetUserName()' };
+        else
+            beta.global.currentuser = null;
     </script>
     @Scripts.Render("~/bundles/beta")
     @RenderSection("scripts", required: false)

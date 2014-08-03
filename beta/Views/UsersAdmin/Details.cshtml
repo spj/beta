@@ -1,41 +1,43 @@
-﻿<script type="text/html" id="UsersAdminViewTmpl">
-<form method="post" data-bind="submit: submit, event: {reset:reset}" class="form-horizontal" role="form">
-@Html.AntiForgeryToken()
+﻿
+<form name="userForm" method="post" ng-submit="submit()" class="form-horizontal" role="form" novalidate>
+    @Html.AntiForgeryToken()
     <div class="form-group">
         <label class="col-md-2 control-label">Email</label>
-        <div class="col-md-10" data-bind="text:email"/>
+        <div class="col-md-10">{{data.email}}</div>
     </div>
     <div class="form-group">
         <label class="col-md-2 control-label">Name</label>
         <div class="col-md-10">
-            <input type="text" data-bind="value:fullname" class="form-control" autofocus/>
+            <input name="fullname" type="text" ng-model="data.fullname" class="form-control" autofocus required/>
         </div>
     </div>
     <div class="form-group">
-        <label class="col-md-2 control-label">Lockout</label>
-        <div class="col-md-10">
-            <input type="checkbox" data-bind="checked:lockout" @*class="form-control"*@ />
+        <div class="checkbox">
+            <label>
+                <input type="checkbox" ng-checked="data.lockout"/>Lockout
+            </label>
         </div>
     </div>
     <div class="form-group">
         <label class="col-md-2 control-label">Roles</label>
         <div class="row">
-            <ul class="list-unstyled" data-bind="foreach: roles">
-                <li class="col-sm-3">
-                    <input type="checkbox" name="roles" data-bind="checked: selected"/>
-                    <span data-bind="text: name"></span>
+            <ul class="list-unstyled">
+                <li class="col-sm-3" ng-repeat="role in data.roles">
+                    <label>
+                        <input type="checkbox" name="roles" ng-checked="role.selected" />{{role.name}}
+                    </label>
                 </li>
             </ul>
         </div>
     </div>
     <div class="form-group">
         <label class="col-md-2 control-label">Dealers</label>
-        <input type="text" data-bind="value:dealerName, typeahead: dealerTypeaheadHelper" class="form-control" autocomplete="off" />
+        <input name="dealer" type="text" ng-model="data.dealer" typeahead="dealer.Name for dealer in getDealers($viewValue)" typeahead-min-length="3" typeahead-editable="false" typeahead-on-select="add" class="form-control" autocomplete="off" />
         <div class="row">
-            <ul class="list-unstyled" data-bind="foreach: dealers">
-                <li class="col-sm-3">                    
-                    <span data-bind="text: Name"></span>(<span data-bind="text: DealerID"></span>)
-                    <a href="#" data-bind="click:$root.del">Del</a>
+            <ul class="list-unstyled">
+                <li class="col-sm-3" ng-repeat="dealer in data.dealers">
+                    <span>{{dealer.Name}}</span>(<span>{{dealer.DealerID}}</span>)
+                    <a href="#" ng-click="del">Del</a>
                 </li>
             </ul>
         </div>
@@ -43,9 +45,8 @@
 
     <div class="form-group">
         <div class="col-md-offset-2 col-md-10">
-            <input type="submit" class="btn btn-default" value="Submit" />
-            <input type="reset" class="btn btn-default" value="Reset" />
+            <input type="submit" class="btn btn-default" value="Submit" ng-disabled="userForm.$invalid" />
+            <input type="reset" class="btn btn-default" value="Reset" ng-click="reset()" />
         </div>
     </div>
 </form>
-</script>
