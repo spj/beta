@@ -215,3 +215,4 @@ pip-log.txt
 .mr.developer.cfg
 todo.txt
 beta/Scripts/knockout.js
+/beta/node_modules
