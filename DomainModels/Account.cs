@@ -38,6 +38,9 @@ namespace beta.DomainModels
                             _model.Email = reader.GetString(_idx);
                             _idx = reader.GetOrdinal("fullname");
                             _model.UName = reader.GetString(_idx);
+                            _idx = reader.GetOrdinal("PhoneNumber");
+                            if (!reader.IsDBNull(_idx))
+                                _model.PhoneNumber = reader.GetString(_idx);
                             _idx = reader.GetOrdinal("LockoutEndDateUtc");
                             if (!reader.IsDBNull(_idx))
                                 _model.LockoutEndDate = reader.GetDateTime(_idx);
@@ -54,7 +57,9 @@ namespace beta.DomainModels
         public string UID { get; set; }
         public string Email { get; set; }
         public string UName { get; set; }
+        public string PhoneNumber { get; set; }
         public DateTime? LockoutEndDate { get; set; }
+        public bool Lockout { get { return this.LockoutEndDate != null; } }
     }
 
     public class RoleModel
@@ -65,8 +70,10 @@ namespace beta.DomainModels
 
     public class UserDealersAndRoles
     {
+        DealerUserModel _user = null;
         List<string> _roles = null;
         List<string> _dealers = null;
+        public DealerUserModel User { get { return _user; } }
         public List<string> Roles { get { return _roles; } }
         public List<string> Dealers { get { return _dealers; } }
         public UserDealersAndRoles(string user)
@@ -86,18 +93,37 @@ namespace beta.DomainModels
                 {
                     if (reader.HasRows)
                     {
-                        if (_roles == null) _roles = new List<string>();
-                        if (_dealers == null) _dealers = new List<string>();
                         while (reader.Read())
                         {
-                            _roles.Add(reader.GetString(0));
+                            _user = new DealerUserModel();
+                            int _idx = reader.GetOrdinal("id");
+                            _user.UID = reader.GetString(_idx);
+                            _idx = reader.GetOrdinal("email");
+                            _user.Email = reader.GetString(_idx);
+                            _idx = reader.GetOrdinal("fullname");
+                            _user.UName = reader.GetString(_idx);
+                            _idx = reader.GetOrdinal("PhoneNumber");
+                            if (!reader.IsDBNull(_idx))
+                                _user.PhoneNumber = reader.GetString(_idx);
                         }
+
                         reader.NextResult();
                         if (reader.HasRows)
                         {
+                           
+                            if (_dealers == null) _dealers = new List<string>();
                             while (reader.Read())
                             {
                                 _dealers.Add(reader.GetString(0));
+                            }
+                            reader.NextResult();
+                            if (reader.HasRows)
+                            {
+                                if (_roles == null) _roles = new List<string>();
+                                while (reader.Read())
+                                {
+                                    _roles.Add(reader.GetString(0));
+                                }
                             }
                         }
                     }
