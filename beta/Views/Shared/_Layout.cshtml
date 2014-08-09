@@ -5,8 +5,8 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Desk It</title>
-    @*<link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css">*@
-    <link rel="stylesheet" href="~/Content/css/bootstrap.css">
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css">
+    @*<link rel="stylesheet" href="~/Content/css/bootstrap.css">*@
     @Styles.Render("~/Content/css")
 </head>
 <body>
@@ -57,8 +57,8 @@
                         <ul class="nav navbar-nav navbar-right" ng-controller="accountCtrl">
                         @if (!User.IsInRole("Admin"))
                         {
-                            <li>
-                                <a href="#" class="btn dropdown-toggle" data-toggle="dropdown">
+                            <li class="dropdown" is-open="status.isopen">
+                                <a href="#" class="btn dropdown-toggle">
                                     <span>{{data.dealer.Name}}</span>
                                     <span class="caret"></span>
                                 </a>
@@ -98,11 +98,10 @@
             <p>&copy; @DateTime.Now.Year - Dear Corp.</p>
         </footer>
     </div>
-    @*<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>*@
-    <script src="~/Scripts/jquery.min.js"></script>
-    <script src="~/Scripts/angular.js"></script>
-    <script src="~/Scripts/underscore-min.js"></script>
-    @*<script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.6.0/underscore-min.js"></script>*@
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.21/angular.min.js"></script>
+    @*<script src="~/Scripts/jquery.min.js"></script>*@
+    @*<script src="~/Scripts/angular.js"></script>*@
     <script>
         var beta = { global: {} }
         beta.global.webroot = '@Url.Content("~")';

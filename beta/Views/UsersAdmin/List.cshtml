@@ -1,5 +1,5 @@
-﻿<div ui-view>
-    <a class="row" ng-repeat="user in users" href="#/users/detail/{{user.UID}}">
+﻿<div>
+    <a class="row" ng-repeat="user in users" href="#/user/{{user.UID}}">
         <div class="col-lg-2 col-md-2 col-sm-4 col-xs-6">{{user.Email}}</div>
         <div class="col-lg-2 col-md-2 col-sm-4 col-xs-6">{{user.UName}}</div>
     </a>
