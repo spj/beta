@@ -28,7 +28,6 @@ namespace beta.Controllers
         public JsonResult GetUserDealersAndRoles(string user)
         {
             var _data = new UserDealersAndRoles(user);
-            var _roles = _data.Roles;
             var _dealers = _data.Dealers;
            var _dealerExts = (from d in CacheData.GetDealers()
                            join i in _dealers on d.DealerID equals i
@@ -37,7 +36,7 @@ namespace beta.Controllers
                                DealerID = d.DealerID,
                                Name = d.Name,
                            }).ToList();
-           return Json(new { roles=_roles, dealers=_dealerExts}, JsonRequestBehavior.AllowGet);
+           return Json(new { user = _data.User, roles = _data.Roles, dealers = _dealerExts }, JsonRequestBehavior.AllowGet);
         }
 
         [Route("GetRoles")]
