@@ -1,5 +1,5 @@
 ﻿$.ajaxSetup({ cache: true })
-angular.module('betaApp', ['ui.router', 'ui.bootstrap', 'bz.Directives'])
+var betaApp = angular.module('betaApp', ['ui.router', 'ui.bootstrap', 'bz.Directives'])
 .config(function ($stateProvider, $urlRouterProvider) {
     // For any unmatched url, redirect to /state1
    // $urlRouterProvider.otherwise(beta.global.isAuthenticated ? "/home" : "/index");
@@ -19,8 +19,8 @@ angular.module('betaApp', ['ui.router', 'ui.bootstrap', 'bz.Directives'])
       .state('register', {
           url: "/register",
           templateUrl: String.format("{0}{1}/GetView/{2}", beta.global.webroot, 'Account', 'Register'),
-          controller: function ($scope, $http) {
-              registerCtrl.call(this, $scope, $http);
+          controller: function ($scope, $http, userService) {
+              registerCtrl.call(this, $scope, $http, userService);
           }
       })
       .state('login', {
@@ -34,19 +34,19 @@ angular.module('betaApp', ['ui.router', 'ui.bootstrap', 'bz.Directives'])
     .state('users', {
         url: "/users",
         templateUrl: String.format("{0}{1}/GetView/{2}", beta.global.webroot, 'UsersAdmin', 'List'),
-        controller: function ($scope, $http) {
-            usersCtrl.call(this, $scope, $http);
+        controller: function ($scope, userService) {
+            usersCtrl.call(this, $scope, userService);
         }
     })
-    .state('users.detail', {
-        url: "/detail/:uid",
+    .state('user', {
+        url: "/user/:uid",
         templateUrl: String.format("{0}{1}/GetView/{2}", beta.global.webroot, 'UsersAdmin', 'Details'),
-        controller: function ($scope, $http, $stateParams) {
-            userCtrl.call(this, $scope, $http, $stateParams.uid);
+        controller: function ($scope, $http, $stateParams, userService) {
+            userCtrl.call(this, $scope, $http, userService, $stateParams.uid);
         }
     })
 })
-.controller("accountCtrl", function ($scope, $http) {
+.controller("accountCtrl", function ($scope, $http, $rootScope) {
     $scope.getDealers = function (user) {
         $.getJSON(String.format("{0}Independent/GetUserDealers", beta.global.webroot), { user: user }).done(function (data) {
             $scope.$apply(function () {           
@@ -55,8 +55,15 @@ angular.module('betaApp', ['ui.router', 'ui.bootstrap', 'bz.Directives'])
             beta.global.currentuser = $scope.data;
         })
     };
+    $scope.status = {
+        isopen: false
+    };
     $scope.change = function (dealer) {
-        $scope.data.dealer = dealer;
+        this.data.dealer = dealer;
+        this.status.isopen = false;
+        $rootScope.$broadcast("dealerChanged", {
+            dealer:dealer
+        });
         beta.global.currentuser.dealer = dealer;
     }
     $scope.getDealers(beta.global.currentuser.email);
@@ -64,4 +71,81 @@ angular.module('betaApp', ['ui.router', 'ui.bootstrap', 'bz.Directives'])
         //$scope.$watch('beta.global.currentuser.email', function (newvalue, oldvalue) {
 
         //});
+});
+
+betaApp.service('userService', function ($http, $q) {
+    return ({
+        getRoles: getRoles,
+        getUserDealersAndRoles: getUserDealersAndRoles,
+        getDealers: getDealers,
+        getDealerUsers: getDealerUsers
+    });
+    function getDealerUsers(dealer) {
+        var request = $http({
+            method: "get",
+            url: String.format("{0}GetDealerUsers/{1}",beta.global.webroot, dealer),
+            params: {
+                action: "get"
+            }
+        });
+
+        return (request.then(handleSuccess, handleError));
+    }
+    function getRoles() {
+        var request = $http({
+            method: "get",
+            url: String.format("{0}GetRoles", beta.global.webroot),
+            params: {
+                action: "get"
+            }
+        });
+
+        return (request.then(handleSuccess, handleError));
+    }
+    function getUserDealersAndRoles(uid) {
+        var request = $http({
+            method: "get",
+            url: String.format("{0}GetUserDealersAndRoles/{1}", beta.global.webroot, uid),
+            params: {
+                action: "get"
+            }
+        });
+
+        return (request.then(handleSuccess, handleError));
+    }
+    function getDealers(dealer) {
+        var request = $http({
+            method: "get",
+            url: String.format("{0}Dealers/{1}", beta.global.webroot, dealer),
+            params: {
+                action: "get"
+            }
+        });
+
+        return (request.then(handleSuccess, handleError));
+    }
+    function handleError(response) {
+        // The API response from the server should be returned in a
+        // nomralized format. However, if the request was not handled by the
+        // server (or what not handles properly - ex. server error), then we
+        // may have to normalize it on our end, as best we can.
+        if (
+            !angular.isObject(response.data) ||
+            !response.data.message
+            ) {
+
+            return ($q.reject("An unknown error occurred."));
+
+        }
+
+        // Otherwise, use expected error message.
+        return ($q.reject(response.data.message));
+
+    }
+
+    function handleSuccess(response) {
+
+        return (response.data);
+
+    }
 });
