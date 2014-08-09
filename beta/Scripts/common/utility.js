@@ -57,12 +57,18 @@ String.prototype.startsWith = function (prefix) {
     return (this.substr(0, prefix.length) === prefix);
 }
 
-function submitData(model) {
-    var _obj = model;
-    if (model.submitData) 
-        _obj = _(model).pick(model.submitData);
-    var _escapedObj =  _(_obj).map(function (o) { return _.escape(o); });
-    return angular.toJson(_escapedObj);
+function submitData(data) {//{model, properties, propertiesWithoutEscape}
+    var _obj = data.model, _objWithoutEscape;
+    if (data.propertiesWithoutEscape) {
+        _obj = _.omit(_obj, data.propertiesWithoutEscape);
+        _objWithoutEscape = _.pick(data.model, data.propertiesWithoutEscape);
+    }
+    if (data.properties)
+        _obj = _.pick(_obj,data.properties);
+    var _escapedObj = _.mapValues(_obj, function (o) { return _.escape(o); });
+    if (_objWithoutEscape)
+        _obj = _.assign(_escapedObj, _objWithoutEscape);
+    return angular.toJson(_obj);
 }
 
 function getTypeAheadFromJson(data, property) {
