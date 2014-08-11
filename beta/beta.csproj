@@ -156,9 +156,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\css\common\bootstrap-notify.css" />
     <Content Include="Content\css\bootstrap.css" />
     <Content Include="Content\css\ng-grid.css" />
-    <Content Include="Content\css\Site.css" />
+    <Content Include="Content\css\common\Site.css" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="packages.config" />
     <Content Include="NLog.config" />
@@ -201,7 +202,7 @@
     <Content Include="Scripts\bootstrap-switch.min.js" />
     <Content Include="appSettings.config" />
     <Content Include="connections.config" />
-    <Content Include="Scripts\bz.account.js" />
+    <Content Include="Scripts\bz.forgetPwd.js" />
     <Content Include="Scripts\bz.sendVerifyCode.js" />
     <Content Include="Scripts\common\bootstrap-notify.js" />
     <Content Include="Scripts\common\bootstrap3-typeahead.js" />
