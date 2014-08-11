@@ -22,8 +22,8 @@ namespace beta
             //          "~/Scripts/bootstrap.js",
             //          "~/Scripts/respond.js"));
             bundles.Add(new ScriptBundle("~/bundles/beta").Include("~/Scripts/common/*.js"));
-            bundles.Add(new ScriptBundle("~/bundles/beta.account").Include(
-      "~/Scripts/bz.account.js"));
+            bundles.Add(new ScriptBundle("~/bundles/beta.forgetPwd").Include(
+      "~/Scripts/bz.forgetPwd.js"));
             bundles.Add(new ScriptBundle("~/bundles/beta.register").Include(
      "~/Scripts/bz.register.js"));
             bundles.Add(new ScriptBundle("~/bundles/beta.usersAdmin").Include(
@@ -31,7 +31,7 @@ namespace beta
             bundles.Add(new ScriptBundle("~/bundles/beta.sendVerifyCode").Include(
       "~/Scripts/bz.sendVerifyCode.js"));
             bundles.Add(new StyleBundle("~/Content/css").Include(
-                "~/Content/css/site.css"));
+                "~/Content/css/common/*.css"));
       
         }
     }
