@@ -28,10 +28,12 @@
     <div class="form-group">
         <div class="col-md-offset-2 col-md-10">
             <input type="submit" class="btn btn-default" value="Veify" />
-            <input type="button" class="btn btn-default" value="Send New One" onclick="SendVerifyCode()" />
+            <input type="button" class="btn btn-default" value="Send New One" ng-click="SendVerifyCode()" ng-controller="verifyCodeCtrl" />
         </div>
     </div>
 }
-@Scripts.Render("~/bundles/beta.sendVerifyCode")
-
+    @using (Html.BeginScripts())
+    {
+        @Scripts.Render("~/bundles/beta.sendVerifyCode")
+    }
 

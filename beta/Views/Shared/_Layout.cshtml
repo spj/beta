@@ -9,8 +9,10 @@
     @*<link rel="stylesheet" href="~/Content/css/bootstrap.css">*@
     @Styles.Render("~/Content/css")
 </head>
-<body>
-    <div class='notifications bottom-right'></div>
+<body ng-controller="rootCtrl">
+    <div class='notifications bottom-right'>
+        <alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>
+    </div>
     <div class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">
