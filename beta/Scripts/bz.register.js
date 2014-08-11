@@ -9,7 +9,7 @@
     $scope.submit = function () {
         this.data.password = AESencrypt(this.data.clearPassword);
         $.post(String.format("{0}Account/Register", beta.global.webroot), { data: submitData( this.data, this.submitData) }).done(function (data) {
-
+            $scope.notify('success', "please activate your account via your email");
         });
     };
     $scope.reset = function () {

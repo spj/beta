@@ -139,7 +139,7 @@ function userCtrl($scope, $http, userService, uid) {
 
         $.post(String.format("{0}ExecuteNonQuery", beta.global.webroot), { cmdText: AESencrypt(sqlcmd), cmdParameter: angular.toJson(sqlparameter) }).done(function (data) {
         }).fail(function (xhr, status, error) {
-            //showNotify(xhr.responseText);
+            $scope.notify("danger", xhr.responseText);
         });
     }
     $scope.reset = function () {
