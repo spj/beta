@@ -1,5 +1,5 @@
 ﻿$.ajaxSetup({ cache: true })
-var betaApp = angular.module('betaApp', ['ui.router', 'ui.bootstrap', 'bz.Directives'])
+var betaApp = angular.module('betaApp', ['ui.router', 'ui.bootstrap', 'ui.mask', 'bz.Directives'])
 .config(function ($stateProvider, $urlRouterProvider) {
     // For any unmatched url, redirect to /state1
    // $urlRouterProvider.otherwise(beta.global.isAuthenticated ? "/home" : "/index");
@@ -13,18 +13,18 @@ var betaApp = angular.module('betaApp', ['ui.router', 'ui.bootstrap', 'bz.Direct
           templateUrl: String.format("{0}{1}/GetView/{2}", beta.global.webroot, "Home", "Index")
       })
       .state('home', {
-          url: "/home",
+          url: "^/home",
           templateUrl: String.format("{0}{1}/GetView/{2}", beta.global.webroot, "Home", "Home")
       })
       .state('register', {
-          url: "/register",
+          url: "^/register",
           templateUrl: String.format("{0}{1}/GetView/{2}", beta.global.webroot, 'Account', 'Register'),
           controller: function ($scope, $http, userService) {
               registerCtrl.call(this, $scope, $http, userService);
           }
       })
       .state('login', {
-          url: "/login",
+          url: "^/login",
           templateUrl: String.format("{0}{1}/GetView/{2}", beta.global.webroot, 'Account', 'Login'),
       })
       .state('roles', {
@@ -44,7 +44,39 @@ var betaApp = angular.module('betaApp', ['ui.router', 'ui.bootstrap', 'bz.Direct
         controller: function ($scope, $http, $stateParams, userService) {
             userCtrl.call(this, $scope, $http, userService, $stateParams.uid);
         }
+    }).
+    state('forgetPassword', {
+        url: "/forgetPassword",
+        templateUrl: String.format("{0}{1}/GetView/{2}", beta.global.webroot, 'Account', 'ForgotPassword'),
+        controler: function ($scope) {
+            pwdCtrl.call(this, $scope);
+        }
     })
+})
+//.run(function ($rootScope) {
+//    $rootScope.alerts = [
+//    //{ type: 'danger', msg: 'Oh snap! Change a few things up and try submitting again.' },
+//    //{ type: 'success', msg: 'Well done! You successfully read this important alert message.' }
+//    ];
+//    $rootScope.closeAlert = function (index) {
+//        this.alerts.splice(index, 1);
+//    };
+//    $rootScope.$on("notify", function (event,args) {
+//        $rootScope.$apply(function () {
+//            $rootScope.alerts.push({ type: args.type, msg: args.msg });
+//        });
+//    });
+//})
+.controller("rootCtrl", function ($scope) {
+    $scope.alerts = [];
+    $scope.closeAlert = function (index) {
+        this.alerts.splice(index, 1);
+    };
+    $scope.notify =function (type, msg) {
+        this.$apply(function () {
+            $scope.alerts.push({ type: type, msg: msg });
+        });
+    };
 })
 .controller("accountCtrl", function ($scope, $http, $rootScope) {
     $scope.getDealers = function (user) {
